@@ -1,0 +1,81 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="theme-layout">
+
+	<div class="authtication bluesh high-opacity">
+		<div class="bg-image" style="background-image: url('static/images/resources/login-bg3.jpg')"></div>
+		<ul class="welcome-caro">
+			<li class="welcome-box">
+				<figure><img src="static/images/resources/login-1.png" alt=""></figure>
+				<h4>Ask questions with seniors Researchers</h4>
+				<p>
+					Ask questions and get the experienced answer by researchers and others fellows.
+				</p>
+			</li>
+			<li class="welcome-box">
+				<figure><img src="static/images/resources/login-2.png" alt=""></figure>
+				<h4>Find New Researchers or Friends</h4>
+				<p>
+					Join Socimo and make your network of university or college fellows.
+				</p>
+			</li>
+			<li class="welcome-box">
+				<figure><img src="static/images/resources/login-3.png" alt=""></figure>
+				<h4>Sell Your Online paid Content</h4>
+				<p>
+					Sell your online lectures, videos, books and many more with Socimo.
+				</p>
+			</li>
+
+		</ul>
+	</div>
+	<div class="auth-login">
+		<div class="logo"><img src="static/images/logo.png" alt=""><span>Socimo</span></div>
+		<div class="mockup left-bottom"><img src="static/images/mockup.png" alt=""></div>
+		<div class="verticle-center">
+			<div class="login-form">
+				<h4><i class="icofont-key-hole"></i> Login</h4>
+				<form method="post" class="c-form" action="/login">
+					{{ form.csrf_token }}
+                    {% if msg %}
+                        <div class="alert alert-danger">{{ msg }}</div>
+                    {% endif %}
+                    <fieldset class="email">
+				        {{ form.email.label }}
+				        {{ form.email(placeholder='youremail@example.com') }}
+				        {% if form.email.errors %}
+				          <ul class="errors">
+				            {% for error in form.email.errors %}
+				              <li>{{ error }}</li>{% endfor %}
+				          </ul>
+				        {% endif %}                   	
+                    </fieldset>
+
+                    <fieldset class="password">
+				        {{ form.password.label }}
+				        {{ form.password }}
+				        {% if form.email.errors %}
+				          <ul class="errors">
+				            {% for error in form.password.errors %}
+				              <li>{{ error }}</li>{% endfor %}
+				          </ul>
+				        {% endif %}                    	
+                    </fieldset>
+					<!-- <input type="text" placeholder="User Name @" name="email" required> -->
+					<!-- <input type="password" placeholder="xxxxxxxxxx" name="password" required> -->
+					<div class="checkbox">
+						<input type="checkbox" id="checkbox" checked>
+						<label for="checkbox"><span>Remember Me</span></label>
+
+					</div>
+					<button class="main-btn" type="submit"><i class="icofont-key"></i> Login</button>
+                      <a href="/signup" class="mt-3 text-success">create new account</a>
+				</form>
+			</div>
+		</div>
+		<div class="mockup right"><img src="static/images/star-shape.png" alt=""></div>
+	</div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,980 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<!-- <div class="page-loader" id="page-loader">
+
+		<div class="loader"><span class="loader-item"></span><span class="loader-item"></span><span
+				class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span
+				class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span
+				class="loader-item"></span><span class="loader-item"></span></div>
+
+	</div>page loader -->
+<div class="theme-layout">
+
+	<header class="">
+		<div class="topbar stick">
+			<div class="logo"><img src="static/images/logo.png" alt=""><span>Socimo</span></div>
+			<div class="searches">
+				<form method="post">
+					<input type="text" placeholder="Search...">
+					<button type="submit"><i class="icofont-search"></i></button>
+					<span class="cancel-search"><i class="icofont-close"></i></span>
+					<div class="recent-search">
+						<h4 class="recent-searches">Your's Recent Search</h4>
+						<ul class="so-history">
+							<li>
+								<div class="searched-user">
+									<figure><img src="static/images/resources/user1.jpg" alt=""></figure>
+									<!-- code modified this session to remove ['name'] -->
+									<span>{{ session['user'] }}</span>
+								</div>
+								<span class="trash"><i class="icofont-close-circled"></i></span>
+							</li>
+							<li>
+								<div class="searched-user">
+									<figure><img src="static/images/resources/user2.jpg" alt=""></figure>
+									<span>Maria K</span>
+								</div>
+								<span class="trash"><i class="icofont-close-circled"></i></span>
+							</li>
+							<li>
+								<div class="searched-user">
+									<figure><img src="static/images/resources/user3.jpg" alt=""></figure>
+									<span>Fawad Khan</span>
+								</div>
+								<span class="trash"><i class="icofont-close-circled"></i></span>
+							</li>
+							<li>
+								<div class="searched-user">
+									<figure><img src="static/images/resources/user4.jpg" alt=""></figure>
+									<span>Danial Sandos</span>
+								</div>
+								<span class="trash"><i class="icofont-close-circled"></i></span>
+							</li>
+							<li>
+								<div class="searched-user">
+									<figure><img src="static/images/resources/user5.jpg" alt=""></figure>
+									<span>Jack Carter</span>
+								</div>
+								<span class="trash"><i class="icofont-close-circled"></i></span>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<ul class="web-elements">
+				<li>
+					<div class="user-dp">
+						<a href="profile-page2.html" title="">
+							<img alt="" src="static/images/resources/user.jpg">
+							<div class="name">
+								<!-- code modified this session to remove ['name'] -->
+								<h4>{{ session['user'] }}</h4>
+							</div>
+						</a>
+					</div>
+				</li>
+				<li class="go-live">
+					<a href="live-stream.html" title="Go Live" data-toggle="tooltip">
+						<i>
+							<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="18px"
+								height="18px">
+								<path
+									d="M 6.1015625 6.1015625 C 3.5675625 8.6345625 2 12.134 2 16 C 2 19.866 3.5675625 23.365437 6.1015625 25.898438 L 7.5195312 24.480469 C 5.3465312 22.307469 4 19.308 4 16 C 4 12.692 5.3465312 9.6925313 7.5195312 7.5195312 L 6.1015625 6.1015625 z M 25.898438 6.1015625 L 24.480469 7.5195312 C 26.653469 9.6925312 28 12.692 28 16 C 28 19.308 26.653469 22.307469 24.480469 24.480469 L 25.898438 25.898438 C 28.432437 23.365437 30 19.866 30 16 C 30 12.134 28.432437 8.6345625 25.898438 6.1015625 z M 9.6367188 9.6367188 C 8.0077188 11.265719 7 13.515 7 16 C 7 18.485 8.0077187 20.734281 9.6367188 22.363281 L 11.052734 20.947266 C 9.7847344 19.680266 9 17.93 9 16 C 9 14.07 9.7847344 12.319734 11.052734 11.052734 L 9.6367188 9.6367188 z M 22.363281 9.6367188 L 20.947266 11.052734 C 22.215266 12.319734 23 14.07 23 16 C 23 17.93 22.215266 19.680266 20.947266 20.947266 L 22.363281 22.363281 C 23.992281 20.734281 25 18.485 25 16 C 25 13.515 23.992281 11.265719 22.363281 9.6367188 z M 16 12 A 4 4 0 0 0 16 20 A 4 4 0 0 0 16 12 z" />
+							</svg></i>
+					</a>
+				</li>
+				<li>
+					<a href="index.html" title="Home" data-toggle="tooltip">
+						<i>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-home">
+								<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+								<polyline points="9 22 9 12 15 12 15 22"></polyline>
+							</svg></i>
+					</a>
+				</li>
+				<li>
+					<a class="mesg-notif" href="#" title="Messages" data-toggle="tooltip">
+						<i>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-message-square">
+								<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+							</svg></i>
+					</a>
+					<span></span>
+				</li>
+				<li>
+					<a class="mesg-notif" href="#" title="Notifications" data-toggle="tooltip">
+						<i>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-bell">
+								<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+								<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+							</svg></i>
+					</a>
+					<span></span>
+				</li>
+				<li>
+					<a class="create" href="#" title="Add New" data-toggle="tooltip">
+						<i>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-plus">
+								<line x1="12" y1="5" x2="12" y2="19"></line>
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+							</svg></i>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="">
+						<i>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-grid">
+								<rect x="3" y="3" width="7" height="7"></rect>
+								<rect x="14" y="3" width="7" height="7"></rect>
+								<rect x="14" y="14" width="7" height="7"></rect>
+								<rect x="3" y="14" width="7" height="7"></rect>
+							</svg>
+						</i>
+					</a>
+					<ul class="dropdown">
+						<li><a href="profile.html" title=""><i class="icofont-user-alt-3"></i> Your Profile</a></li>
+						<li><a href="add-new-course.html" title=""><i class="icofont-plus"></i> New Course</a></li>
+						<li><a class="invite-new" href="#" title=""><i class="icofont-brand-slideshare"></i> Invite
+								Collegue</a></li>
+						<li><a href="pay-out.html" title=""><i class="icofont-price"></i> Payout</a></li>
+						<li><a href="price-plan.html" title=""><i class="icofont-flash"></i> Upgrade</a></li>
+						<li><a href="help-faq.html" title=""><i class="icofont-question-circle"></i> Help</a></li>
+						<li><a href="settings.html" title=""><i class="icofont-gear"></i> Setting</a></li>
+						<li><a href="privacy-n-policy.html" title=""><i class="icofont-notepad"></i> Privacy</a>
+						</li>
+						<li><a class="dark-mod" href="#" title=""><i class="icofont-moon"></i> Dark Mode</a></li>
+						<li class="logout"><a href="/logout" title=""><i class="icofont-power"></i> Logout</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+	</header><!-- header -->
+
+	<nav class="sidebar">
+		<ul class="menu-slide">
+			<li class="active menu-item-has-children">
+				<a class="" href="#" title="">
+					<i><svg id="icon-home" class="feather feather-home" stroke-linejoin="round" stroke-linecap="round"
+							stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14"
+							width="14" xmlns="http://www.w3.org/2000/svg">
+							<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+							<polyline points="9 22 9 12 15 12 15 22" />
+						</svg></i> Home
+				</a>
+				<ul class="submenu">
+					<li><a href="index.html" title="">Newsfeed</a></li>
+					<li><a href="company-home.html" title="">Company Home</a></li>
+					<li><a href="profile-page2.html" title="">User Profile</a></li>
+					<li><a href="profile.html" title="">Student User Profile</a></li>
+					<li><a href="groups.html" title="">Groups</a></li>
+					<li><a href="group-detail.html" title="">Group Detail</a></li>
+					<li><a href="post-detail.html" title="">Social Post Detail</a></li>
+					<li><a href="messages.html" title="">Chat/Messages</a></li>
+					<li><a href="notifications.html" title="">Notificatioins</a></li>
+					<li><a href="search-result.html" title="">Search Result</a></li>
+				</ul>
+			</li>
+			<li class="menu-item-has-children">
+				<a class="" href="#" title="">
+					<i class=""><svg id="ab7" class="feather feather-zap" stroke-linejoin="round" stroke-linecap="round"
+							stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14"
+							width="14" xmlns="http://www.w3.org/2000/svg">
+							<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+						</svg></i> Features
+				</a>
+				<ul class="submenu">
+					<li><a href="videos.html" title="">Videos</a></li>
+					<li><a href="live-stream.html" title="">Live Stream</a></li>
+					<li><a href="event-page.html" title="">Events Page</a></li>
+					<li><a href="event-detail.html" title="">Event Detail</a></li>
+					<li><a href="Q-A.html" title="">QA</a></li>
+					<li><a href="Q-detail.html" title="">QA Detail</a></li>
+					<li><a href="help-faq.html" title="">Support Help</a></li>
+					<li><a href="help-faq-detail.html" title="">Support Detail</a></li>
+				</ul>
+			</li>
+
+			<li class="menu-item-has-children">
+				<a class="" href="#" title="">
+					<i class="">
+						<svg id="ab5" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" class="feather feather-shopping-bag">
+							<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+							<line x1="3" y1="6" x2="21" y2="6"></line>
+							<path d="M16 10a4 4 0 0 1-8 0"></path>
+						</svg></i> Market Place
+				</a>
+				<ul class="submenu">
+					<li><a href="books.html" title="">Books</a></li>
+					<li><a href="book-detail.html" title="">Books Detail</a></li>
+					<li><a href="courses.html" title="">Course</a></li>
+					<li><a href="course-detail.html" title="">course Detail</a></li>
+					<li><a href="add-new-course.html" title="">Add New Course</a></li>
+					<li><a href="product-cart.html" title="">Cart Page</a></li>
+					<li><a href="product-checkout.html" title="">Checkout</a></li>
+					<li><a href="add-credits.html" title="">Add Credit</a></li>
+					<li><a href="pay-out.html" title="">Payouts</a></li>
+					<li><a href="price-plan.html" title="">Pricing Plans</a></li>
+					<li><a href="invoice.html" title="">Invoice</a></li>
+					<li><a href="thank-you.html" title="">Thank you Page</a></li>
+				</ul>
+			</li>
+			<li class="menu-item-has-children">
+				<a class="" href="#" title="">
+					<i class=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" class="feather feather-coffee">
+							<path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+							<path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+							<line x1="6" y1="1" x2="6" y2="4"></line>
+							<line x1="10" y1="1" x2="10" y2="4"></line>
+							<line x1="14" y1="1" x2="14" y2="4"></line>
+						</svg>
+					</i> Blogs
+				</a>
+				<ul class="submenu">
+					<li><a href="blog.html" title="">Blog</a></li>
+					<li><a href="blog-detail.html" title="">Blog Detail</a></li>
+				</ul>
+			</li>
+			<li class="menu-item-has-children">
+				<a class="" href="#" title="">
+					<i><svg id="ab8" class="feather feather-file" stroke-linejoin="round" stroke-linecap="round"
+							stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14"
+							width="14" xmlns="http://www.w3.org/2000/svg">
+							<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+							<polyline points="13 2 13 9 20 9" />
+						</svg></i> Featured Pages
+				</a>
+				<ul class="submenu">
+					<li><a href="404.html" title="">Error 404</a></li>
+					<li><a href="coming-soon.html" title="">Coming Soon</a></li>
+					<li><a href="send-feedback.html" title="">Send Feedback</a></li>
+					<li><a href="badges.html" title="">Badges</a></li>
+					<li><a href="thank-you.html" title="">Thank You</a></li>
+				</ul>
+			</li>
+			<li class="menu-item-has-children">
+				<a class="" href="#" title="">
+					<i class="">
+						<svg id="ab9" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" class="feather feather-lock">
+							<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+							<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+						</svg></i> Authentications
+				</a>
+				<ul class="submenu">
+					<li><a href="sign-in.html" title="">Sign In</a></li>
+					<li><a href="signup.html" title="">Sign Up</a></li>
+					<li><a href="forgot-password.html" title="">Forgot Password</a></li>
+				</ul>
+			</li>
+			<li class="">
+				<a class="" href="about-university.html" title="">
+					<i><svg id="ab1" class="feather feather-users" stroke-linejoin="round" stroke-linecap="round"
+							stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14"
+							width="14" xmlns="http://www.w3.org/2000/svg">
+							<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+							<circle r="4" cy="7" cx="9" />
+							<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+							<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+						</svg></i> University Profile
+				</a>
+			</li>
+			<li class="">
+				<a class="" href="messages.html" title="">
+					<i class="">
+						<svg class="feather feather-message-square" stroke-linejoin="round" stroke-linecap="round"
+							stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14"
+							width="14" xmlns="http://www.w3.org/2000/svg" id="ab2">
+							<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+								style="stroke-dasharray: 68, 88; stroke-dashoffset: 0;" />
+						</svg></i> Live Chat
+				</a>
+			</li>
+			<li class="">
+				<a class="" href="privacy-n-policy.html" title=""><i class="">
+						<svg id="ab4" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" class="feather feather-airplay">
+							<path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1">
+							</path>
+							<polygon points="12 15 17 21 7 21 12 15"></polygon>
+						</svg></i> Privacy Polices
+				</a>
+			</li>
+			<li class="">
+				<a class="" href="settings.html" title=""><i class="">
+
+						<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+							stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							class="feather feather-settings">
+							<circle cx="12" cy="12" r="3"></circle>
+							<path
+								d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+							</path>
+						</svg></i> Web Settings
+				</a>
+			</li>
+			<li class="menu-item-has-children">
+				<a class="#" href="#" title="">
+					<i class="">
+						<svg id="team" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" class="feather feather-smile">
+							<circle cx="12" cy="12" r="10"></circle>
+							<path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+							<line x1="9" y1="9" x2="9.01" y2="9"></line>
+							<line x1="15" y1="9" x2="15.01" y2="9"></line>
+						</svg></i> Development Tools
+				</a>
+				<ul class="submenu">
+					<li><a href="widgets.html" title="">Widgets Collection</a></li>
+					<li><a href="development-component.html" title="">Web Component</a></li>
+					<li><a href="development-elements.html" title="">Web Elements</a></li>
+					<li><a href="loader-spiners.html" title="">Loader Spiners</a></li>
+				</ul>
+			</li>
+
+		</ul>
+	</nav>
+
+	<section>
+		<div class="white-bg">
+			<div class="container-fluid">
+				<div class="menu-caro">
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="sidemenu">
+								<i>
+									<svg id="side-menu" xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+										stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+										<line x1="3" y1="12" x2="21" y2="12"></line>
+										<line x1="3" y1="6" x2="21" y2="6"></line>
+										<line x1="3" y1="18" x2="21" y2="18"></line>
+									</svg></i>
+							</div>
+						</div>
+						<div class="col-lg-8">
+							<div class="page-caro">
+								<div class="link-item">
+									<a class="active" href="" title="">
+										<i class="">
+											<svg class="feather feather-zap" stroke-linejoin="round"
+												stroke-linecap="round" stroke-width="2" stroke="currentColor"
+												fill="none" viewBox="0 0 24 24" height="24" width="24"
+												xmlns="http://www.w3.org/2000/svg">
+												<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+											</svg>
+										</i>
+										<p>Newsfeed</p>
+									</a>
+								</div>
+								<div class="link-item">
+									<a href="" title="">
+										<i class="">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+												stroke-linecap="round" stroke-linejoin="round"
+												class="feather feather-youtube">
+												<path
+													d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z">
+												</path>
+												<polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02">
+												</polygon>
+											</svg>
+										</i>
+										<p>Videos</p>
+									</a>
+								</div>
+								<div class="link-item">
+									<a href="" title="">
+										<i class="">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+												stroke-linecap="round" stroke-linejoin="round"
+												class="feather feather-book">
+												<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+												<path
+													d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z">
+												</path>
+											</svg></i>
+										<p>Books</p>
+									</a>
+								</div>
+								<div class="link-item">
+									<a href="blog.html" title="">
+										<i class=""><svg class="feather feather-layout" stroke-linejoin="round"
+												stroke-linecap="round" stroke-width="2" stroke="currentColor"
+												fill="none" viewBox="0 0 24 24" height="24" width="24"
+												xmlns="http://www.w3.org/2000/svg">
+												<rect ry="2" rx="2" height="18" width="18" y="3" x="3" />
+												<line y2="9" x2="21" y1="9" x1="3" />
+												<line y2="9" x2="9" y1="21" x1="9" />
+											</svg></i>
+										<p>Blog</p>
+									</a>
+								</div>
+								<div class="link-item">
+									<a href="groups.html" title="">
+										<i class="">
+											<svg class="feather feather-users" stroke-linejoin="round"
+												stroke-linecap="round" stroke-width="2" stroke="currentColor"
+												fill="none" viewBox="0 0 24 24" height="24" width="24"
+												xmlns="http://www.w3.org/2000/svg">
+												<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+												<circle r="4" cy="7" cx="9" />
+												<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+												<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+											</svg>
+										</i>
+										<p>Groups</p>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2">
+							<div class="user-inf">
+								<div class="folowerz">Followers: 204</div>
+								<ul class="stars">
+									<li><i class="icofont-star"></i></li>
+									<li><i class="icofont-star"></i></li>
+									<li><i class="icofont-star"></i></li>
+									<li><i class="icofont-star"></i></li>
+									<li><i class="icofont-star"></i></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- carousel menu -->
+
+	<section>
+		<div class="gap">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div id="page-contents" class="row merged20">
+							<div class="col-lg-3">
+								<aside class="sidebar static left">
+									<div class="widget whitish low-opacity">
+										<img src="static/images/time-clock.png" alt="">
+										<div class="bg-image"
+											style="background-image: url('static/images/resources/time-bg.jpg')"></div>
+										<div class="date-time">
+											<div class="realtime">
+												<span id="hours">00</span>
+												<span id="point">:</span>
+												<span id="min">00</span>
+											</div>
+											<span id="date"></span>
+										</div>
+									</div>
+									<div class="widget">
+										<h4 class="widget-title">Complete Your Profile</h4>
+										<span>Your Profile is missing followings!</span>
+										<div data-progress="tip" class="progress__outer" data-value="0.67">
+											<div class="progress__inner">82%</div>
+										</div>
+										<ul class="prof-complete">
+											<li><i class="icofont-plus-square"></i> <a href="#" title="">Upload Your
+													Picture</a><em>10%</em></li>
+											<li><i class="icofont-plus-square"></i> <a href="#" title="">Your
+													University?</a><em>20%</em></li>
+											<li><i class="icofont-plus-square"></i> <a href="#" title="">Add Payment
+													Method</a><em>20%</em></li>
+										</ul>
+									</div><!-- complete profile widget -->
+
+									<div class="widget">
+										<h4 class="widget-title">Your profile has a new Experience section</h4>
+										<p>
+											Showcase your professional experience and education to help potential
+											employers and collaborators find and contact you about career
+											opportunities.
+										</p>
+										<a class="main-btn" href="" title="" data-ripple="">view
+											profile</a>
+									</div><!-- your profile -->
+									<!-- links -->
+								</aside>
+							</div>
+							<div class="col-lg-6">
+								<!-- tab buttons -->
+								<div class="main-wraper">
+									<span class="new-title">Create New Post</span>
+									<div class="new-post">
+										<form method="post">
+											<i class="icofont-pen-alt-1"></i>
+											<input type="text" placeholder="Create New Post">
+										</form>
+										<ul class="upload-media">
+											<li>
+												<a href="#" title="">
+													<i><img src="static/images/image.png" alt=""></i>
+													<span>Photo/Video</span>
+												</a>
+											</li>
+											<li>
+												<a href="#" title="">
+													<i><img src="static/images/activity.png" alt=""></i>
+													<span>Feeling/Activity</span>
+												</a>
+											</li>
+											<li>
+												<a href="live-stream.html" title="">
+													<i><img src="static/images/live-stream.png" alt=""></i>
+													<span>Live Stream</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div><!-- create new post -->
+
+								<div class="main-wraper">
+									<div class="chatroom-title">
+										<i>
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+												stroke-linecap="round" stroke-linejoin="round"
+												class="feather feather-tv">
+												<rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+												<polyline points="17 2 12 7 7 2"></polyline>
+											</svg></i>
+										<span>Chat Rooms <em>Video chat with friends</em></span>
+										<a class="create-newroom" href="#" title="">Create Room</a>
+									</div>
+									<!-- <ul class="chat-rooms ">
+										<li>
+											<div class="room-avatar">
+												<img src="static/images/resources/user2.jpg" alt="">
+												<span class="status online"></span>
+											</div>
+											<span>Sara's Room</span>
+											<a class="join" href="#" title="Join Room">Join</a>
+											<a class="say-hi send-mesg" href="#" title="Send Message"><i
+													class="icofont-facebook-messenger"></i></a>
+										</li>
+										
+									</ul> -->
+								</div>chat rooms
+								<div class="main-wraper">
+									<div class="user-post">
+										<div class="friend-info">
+											<figure>
+												<i class="icofont-learn"></i>
+											</figure>
+											<div class="friend-name">
+												<ins><a title="" href="time-line.html">Suggested</a></ins>
+												<span><i class="icofont-runner-alt-1"></i> Follow similar
+													People</span>
+											</div>
+											<ul class="suggested-caro friends_suggestions"></ul> 
+										</div>
+									</div>
+								</div><!-- suggested friends -->
+								<div id="posts">
+									{% for feed in newsfeeds %}
+									<div class="main-wraper">
+										<div class="user-post">
+											<div class="friend-info">
+												<figure><img alt="" src="static/images/resources/friend-avatar.jpg">
+												</figure>
+												<div class="friend-name">
+													<ins><a href="#">{{feed.user.name}}</a></ins>
+													<span>{{ feed.content }}</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+
+							<!-- 	<div class="loadmore">
+									<div class="sp sp-bars"></div>
+									<a href="#" title="" data-ripple="">Load More..</a>
+								</div> --><!-- loadmore buttons -->
+							</div>
+							<div class="col-lg-3">
+								<aside class="sidebar static right">
+									<div class="widget">
+										<h4 class="widget-title">Your Groups</h4>
+										<ul class="ak-groups">
+											<li>
+												<figure><img src="static/images/resources/your-group1.jpg" alt="">
+												</figure>
+												<div class="your-grp">
+													<h5><a href="" title="">Good Group</a></h5>
+													<a href="#" title=""><i class="icofont-bell-alt"></i>Notifilactions
+														<span>13</span></a>
+													<a href="" title="" class="promote">view feed</a>
+												</div>
+											</li>
+											<li>
+												<figure><img src="static/images/resources/your-group2.jpg" alt="">
+												</figure>
+												<div class="your-grp">
+													<h5><a href="" title="">E-course Group</a></h5>
+													<a href="#" title=""><i class="icofont-bell-alt"></i>Notifilactions
+														<span>13</span></a>
+													<a href="" title="" class="promote">view feed</a>
+												</div>
+											</li>
+										</ul>
+									</div><!-- Your groups -->
+									<div class="widget">
+										<h4 class="widget-title">Suggested Group</h4>
+										<div class="sug-caro">
+											<div class="friend-box">
+												<figure>
+													<img alt="" src="static/images/resources/sidebar-info.jpg">
+													<span>Members: 505K</span>
+												</figure>
+												<div class="frnd-meta">
+													<img alt="" src="static/images/resources/frnd-figure2.jpg">
+													<div class="frnd-name">
+														<a title="" href="#">Social Research</a>
+														<span>@biolabest</span>
+
+													</div>
+													<a class="main-btn2" href="#" title="">Join Community</a>
+												</div>
+											</div>
+											<div class="friend-box">
+												<figure>
+													<img alt="" src="static/images/resources/sidebar-info2.jpg">
+													<span>Members: 505K</span>
+												</figure>
+												<div class="frnd-meta">
+													<img alt="" src="static/images/resources/frnd-figure3.jpg">
+													<div class="frnd-name">
+														<a title="" href="#">Bio Labest Group</a>
+														<span>@biolabest</span>
+
+													</div>
+													<a class="main-btn2" href="#" title="">Join Community</a>
+												</div>
+											</div>
+										</div>
+									</div><!-- suggested group -->
+
+
+
+									<div class="widget stick-widget">
+										<h4 class="widget-title">Who's follownig</h4>
+										<ul class="followers">
+											<li>
+												<figure><img alt="" src="static/images/resources/friend-avatar.jpg">
+												</figure>
+												<div class="friend-meta">
+													<h4>
+														<a title="" href="static/time-line.html">Kelly Bill</a>
+														<span>Dept colleague</span>
+													</h4>
+													<a class="underline" title="" href="#">Follow</a>
+												</div>
+											</li>
+										</ul>
+									</div><!-- whos following -->
+								</aside>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- content -->
+
+	<figure class="bottom-mockup"><img src="images/footer.png" alt=""></figure>
+	<div class="bottombar">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="">&copy; copyright All rights reserved by socimo 2020</span>
+				</div>
+			</div>
+		</div>
+	</div><!-- bottombar -->
+
+	{% include 'models/create_post_model.html' %}
+
+	<div class="cart-product">
+		<a href="product-cart.html" title="View Cart" data-toggle="tooltip"><i class="icofont-cart-alt"></i></a>
+		<span>03</span>
+	</div><!-- view cart button -->
+
+	<div class="chat-live">
+		<a class="chat-btn" href="#" title="Start Live Chat" data-toggle="tooltip"><i
+				class="icofont-facebook-messenger"></i></a>
+		<span>07</span>
+	</div><!-- chat button -->
+	<!-- The Scrolling Modal image with comment -->
+
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+	$(document).ready(function () {
+		getPost()
+	});
+
+	$('#publish_post').click(function (e) {
+		e.preventDefault();
+
+		var post_body = $('#emojionearea1').val();
+		var user_id = "{{ session['user']['id'] }}"
+
+		$.post('/save_post', { 'post_body': post_body, 'user_id': user_id }, function (data) {
+			console.log(data)
+            window.location.reload();
+			$('.post-new-popup').hide();
+		});
+
+	});
+
+	function getPost() {
+		$.get('/get_post', function (data) {
+			$.each(data, function (index) {
+				$('#posts').append(`
+<div class="main-wraper" >
+<div class="user-post">
+											<div class="friend-info">
+												<figure>
+													<em>
+														<svg style="vertical-align: middle;"
+															xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+															viewBox="0 0 24 24">
+															<path fill="#7fba00" stroke="#7fba00"
+																d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z">
+															</path>
+														</svg></em>
+													<img alt="" src="static/images/resources/user7.jpg">
+												</figure>
+												<div class="friend-name">
+													<div class="more">
+														<div class="more-post-optns">
+															<i class="">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24"
+																	height="24" viewBox="0 0 24 24" fill="none"
+																	stroke="currentColor" stroke-width="2"
+																	stroke-linecap="round" stroke-linejoin="round"
+																	class="feather feather-more-horizontal">
+																	<circle cx="12" cy="12" r="1"></circle>
+																	<circle cx="19" cy="12" r="1"></circle>
+																	<circle cx="5" cy="12" r="1"></circle>
+																</svg></i>
+															<ul>
+																<li>
+																	<i class="icofont-pen-alt-1"></i>Edit Post
+																	<span>Edit This Post within a Hour</span>
+																</li>
+																<li>
+																	<i class="icofont-ban"></i>Hide Post
+																	<span>Hide This Post</span>
+																</li>
+																<li>
+																	<i class="icofont-ui-delete"></i>Delete Post
+																	<span>If inappropriate Post By Mistake</span>
+																</li>
+																<li>
+																	<i class="icofont-flag"></i>Report
+																	<span>Inappropriate content</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<ins>
+														<a title="verified" href="" class="text-capitalize">${data[index][6]}</a></ins>
+													<span><i class="icofont-globe"></i> published: Sep,15 2020</span>
+												</div>
+												<div class="post-meta">
+													<p>
+														${data[index][2]}
+													</p>
+													<div class="aud-vid">
+
+													</div>
+													<div class="we-video-info">
+
+														<a href=#"post-detail" title="" class="reply">Reply <i
+																class="icofont-reply"></i></a>
+													</div>
+													<div class="stat-tools">
+														<div class="box">
+															<div class="Like"><a class="Like__link"><i
+																		class="icofont-like"></i> Like</a>
+																<div class="Emojis">
+																	<div class="Emoji Emoji--like">
+																		<div class="icon icon--like"></div>
+																	</div>
+																	<div class="Emoji Emoji--love">
+																		<div class="icon icon--heart"></div>
+																	</div>
+																	<div class="Emoji Emoji--haha">
+																		<div class="icon icon--haha"></div>
+																	</div>
+																	<div class="Emoji Emoji--wow">
+																		<div class="icon icon--wow"></div>
+																	</div>
+																	<div class="Emoji Emoji--sad">
+																		<div class="icon icon--sad"></div>
+																	</div>
+																	<div class="Emoji Emoji--angry">
+																		<div class="icon icon--angry"></div>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<a title="" href="#" class="comment-to"><i
+																class="icofont-comment"></i> Comment</a>
+														<a title="" href="#" class="share-to"><i
+																class="icofont-share-alt"></i> Share</a>
+														<div class="emoji-state">
+															<div class="popover_wrapper">
+																<a class="popover_title" href="#" title=""><img alt=""
+																		src="images/smiles/thumb.png"></a>
+																<div class="popover_content">
+																	<span><img alt="" src="images/smiles/thumb.png">
+																		Likes</span>
+																	<ul class="namelist">
+																		<li>Jhon Doe</li>
+																		<li>Amara Sin</li>
+																		<li>Sarah K.</li>
+																		<li><span>20+ more</span></li>
+																	</ul>
+																</div>
+															</div>
+															<div class="popover_wrapper">
+																<a class="popover_title" href="#" title=""><img alt=""
+																		src="images/smiles/heart.png"></a>
+																<div class="popover_content">
+																	<span><img alt="" src="images/smiles/heart.png">
+																		Love</span>
+																	<ul class="namelist">
+																		<li>Amara Sin</li>
+																		<li>Jhon Doe</li>
+																		<li><span>10+ more</span></li>
+																	</ul>
+																</div>
+															</div>
+															<div class="popover_wrapper">
+																<a class="popover_title" href="#" title=""><img alt=""
+																		src="images/smiles/smile.png"></a>
+																<div class="popover_content">
+																	<span><img alt="" src="images/smiles/smile.png">
+																		Happy</span>
+																	<ul class="namelist">
+																		<li>Sarah K.</li>
+																		<li>Jhon Doe</li>
+																		<li>Amara Sin</li>
+																		<li><span>100+ more</span></li>
+																	</ul>
+																</div>
+															</div>
+															<div class="popover_wrapper">
+																<a class="popover_title" href="#" title=""><img alt=""
+																		src="images/smiles/weep.png"></a>
+																<div class="popover_content">
+																	<span><img alt="" src="images/smiles/weep.png">
+																		Dislike</span>
+																	<ul class="namelist">
+																		<li>Danial Carbal</li>
+																		<li>Amara Sin</li>
+																		<li>Sarah K.</li>
+																		<li><span>15+ more</span></li>
+																	</ul>
+																</div>
+															</div>
+															<p>10+</p>
+														</div>
+														<div class="new-comment" style="display: none;">
+															<form method="post">
+																<input type="text" placeholder="write comment">
+																<button type="submit"><i
+																		class="icofont-paper-plane"></i></button>
+															</form>
+															<div class="comments-area">
+																<ul>
+																	<li>
+																		<figure><img alt=""
+																				src="images/resources/user1.jpg">
+																		</figure>
+																		<div class="commenter">
+																			<h5><a title="" href="#">Jack Carter</a>
+																			</h5>
+																			<span>2 hours ago</span>
+																			<p>
+																				i think that some how, we learn who we
+																				really are and then live with that
+																				decision, great post!
+																			</p>
+																			<span>you can view the more detail via
+																				link</span>
+																			<a title=""
+																				href="https://www.youtube.com/watch?v=HpZgwHU1GcI"
+																				target="_blank">https://www.youtube.com/watch?v=HpZgwHU1GcI</a>
+																		</div>
+																		<a title="Like" href="#"><i
+																				class="icofont-heart"></i></a>
+																		<a title="Reply" href="#"
+																			class="reply-coment"><i
+																				class="icofont-reply"></i></a>
+																	</li>
+
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+</div>
+            `)
+			})
+		})
+	}
+</script>
+
+<script>
+	var user_id = "{{ session['user']['id'] }}"
+	$.get('/get_recommendation/' + user_id, function (data) {
+		console.log(data)
+		$.each(data, function (index) {
+			$('.friends_suggestions')
+			.append(` 
+			<li>
+				<figure><img src="static/photos/${data[index]['image']}" alt="">
+				</figure>
+				<span>${data[index]['name']}</span>
+				<ins></ins>
+				<a href="#" title="" data-ripple=""><i class="icofont-star"></i>
+				Follow</a>
+				</li>
+			`)
+		})
+	})
+
+</script>
+{% endblock %}

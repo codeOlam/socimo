@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from wpkixx.com/html/socimo/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Mar 2021 19:11:39 GMT -->
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<title>Socimo | Social Media Network Template</title>
+	<link rel="icon" href="images/fav.png" type="image/png" sizes="16x16">
+
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/main.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/color.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/responsive.css') }}">
+
+</head>
+
+<body>
+	{% block content %}
+    {% endblock %}
+
+	<script src="{{ url_for('static',filename='js/main.min.js') }}"></script><!-- vendors merged files -->
+	<script src="{{ url_for('static',filename='js/date-time.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/script.js') }}"></script><!-- custom scripts -->
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+</html>

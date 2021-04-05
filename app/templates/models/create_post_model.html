@@ -1,0 +1,46 @@
+<div class="post-new-popup">
+			<div class="popup" style="width: 800px;">
+				<span class="popup-closed"><i class="icofont-close"></i></span>
+				<div class="popup-meta">
+					<div class="popup-head">
+						<h5><i>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+									fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" class="feather feather-plus">
+									<line x1="12" y1="5" x2="12" y2="19"></line>
+									<line x1="5" y1="12" x2="19" y2="12"></line>
+								</svg></i>Create New Post</h5>
+					</div>
+					<div class="post-new">
+						<div class="post-newmeta">
+							<ul class="post-categoroes">
+								<li><i class="icofont-camera"></i> Photo / Video</li>
+								<li><i class="icofont-google-map"></i> Post Location</li>
+								<li><i class="icofont-file-gif"></i> Post Gif</li>
+								<li><i class="icofont-ui-tag"></i> Tag to Friend</li>
+								<li><i class="icofont-users"></i> Share in Group</li>
+								<li><i class="icofont-link"></i> Share Link</li>
+								<li><i class="icofont-video-cam"></i> Go Live</li>
+								<li><i class="icofont-sale-discount"></i> Post Online Course</li>
+								<li><i class="icofont-read-book"></i> Post A Book</li>
+								<li><i class="icofont-globe"></i> Post an Ad</li>
+							</ul>
+{#							<form method="post" class="dropzone" action="http://wpkixx.com/upload-target">#}
+{#								<div class="fallback">#}
+{#									<input name="file" type="file" multiple />#}
+{#								</div>#}
+{#							</form>#}
+						</div>
+						<form method="post" action='/add_post' class="c-form">
+							{{ form.hidden_tag() }}
+							<fieldset class="content">
+								{{form.content(id="emojionearea1", placeholder="What's on your mind!")}}
+							</fieldset>
+								{{ form.submit(class="main-btn mt-2") }}
+							<!-- <textarea id="emojionearea1" placeholder="What's On Your Mind?"></textarea> -->
+							<!-- <button type="submit" id="publish_post" class="main-btn mt-2">Publish</button> -->
+						</form>
+					</div>
+				</div>
+			</div>
+		</div><!-- New post popup -->

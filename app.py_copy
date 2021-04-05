@@ -1,0 +1,193 @@
+import os
+from flask import Flask, render_template, redirect, request, session, json, jsonify
+from werkzeug.utils import secure_filename
+
+from flask_mysqldb import MySQL
+# import mysql.connector as connection
+import pandas as pd
+import unicodedata
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+import numpy
+from pandas.io import sql
+# import MySQLdb
+from sqlalchemy import create_engine
+
+
+
+UPLOAD_FOLDER = '/static/photos'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.secret_key = '64ddg74747'
+app.config['SESSION_TYPE'] = 'filesystem'
+
+app.config['MYSQL_HOST'] = "localhost"
+app.config['MYSQL_USER'] = "root"
+app.config['MYSQL_PASSWORD'] = ""
+app.config['MYSQL_DB'] = "social_community"
+
+mysql = MySQL(app)
+
+user = 'root'
+passw = ''
+host =  'localhost'
+port = 3306
+database = 'social_community'
+
+mydb = create_engine('mysql+pymysql://' + user + ':' + passw + '@' + host + ':' + str(port) + '/' + database , echo=False)
+
+e = []
+
+@app.route('/')
+def index():
+    recommendation_process(e)
+    return render_template('login.html')
+
+
+@app.route('/news_feed')
+def newsfeed():
+    return render_template('newsfeed.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM users WHERE email =%s and password = %s ''', (email, password))
+        user = cur.fetchone()
+        if user:
+            session['user'] = {'id': user[0], 'name': user[1]}
+            return redirect('news_feed')
+        else:
+            msg = 'invalide username or password'
+            return render_template('login.html', msg=msg)
+    else:
+        return render_template('login.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        email = request.form['email']
+        name = request.form['name']
+        password = request.form['password']
+        photo = request.files['photo']
+        target = os.path.join(APP_ROOT,'static/photos/')
+        distination = "/".join([target,photo.filename])
+        photo.save(distination)
+        cur = mysql.connection.cursor()
+        cur.execute('''INSERT INTO users (email,password,name,pics) VALUES(%s, %s, %s,%s)''', (email, password, name,photo.filename))
+        mysql.connection.commit()
+        user = cur.execute('''SELECT * FROM users WHERE email =%s''', ([email]))
+        user = cur.fetchone()
+        session['user'] = {'id': user[0], 'name': name}
+        cur.close()
+        return redirect('news_feed')
+    else:
+        return render_template('sign-up.html')
+
+
+@app.route('/save_post', methods=['POST'])
+def save_post():
+    post_body = request.form['post_body']
+    user_id = request.form['user_id']
+    cur = mysql.connection.cursor()
+    cur.execute('''INSERT INTO posts (user_id,post_body) VALUES(%s, %s)''', (user_id, post_body))
+    mysql.connection.commit()
+    cur.close()
+    return {'success': 'post created'}
+
+
+@app.route('/get_post')
+def get_post():
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT *,u.id FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.id DESC ''')
+    post = cur.fetchall()
+    return jsonify(post)
+
+
+@app.route('/get_recommendation/<user>')
+def get_recommendation(user):
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM recommenda where user_id = %s''', [user])
+    rec = cur.fetchone()
+    user_cluster = rec[2]
+    cur.execute('''SELECT *,u.id FROM recommenda r JOIN users u ON r.user_id = u.id''')
+    users = cur.fetchall()
+
+    recommendations = []
+    for i in range(len(users)):
+        #  recommendations.append(users[i][2])
+        if users[i][2] == user_cluster:
+            if users[i][1] != user:
+                recommendations.append({'user_id':users[i][1],'name':users[i][4],'image':users[i][6]})
+                
+    return jsonify(recommendations)
+
+
+def fi(group,e):
+    a = pd.DataFrame(group)
+    b = pd.DataFrame(a['Cluster'].value_counts())
+    d = a.index
+    c = [a['user_id'][d[0]], int(b.idxmax())]
+    e.append(c)
+
+
+def recommendation_process(e):
+    try:
+        result_dataFrame = pd.read_sql('SELECT * FROM posts', con=mydb)
+    except Exception as e:
+        print(str(e))
+    post_df = result_dataFrame['post_body']
+
+    # vectorization of the texts
+    vectorizer = TfidfVectorizer(stop_words="english")
+    X = vectorizer.fit_transform(post_df)
+    # used words (axis in our multi-dimensional space)
+    words = vectorizer.get_feature_names()
+
+    n_clusters = 1
+    number_of_seeds_to_try = 10
+    max_iter = 300
+    number_of_process = 2  # seads are distributed
+    model = KMeans(n_clusters=n_clusters, max_iter=max_iter, n_init=number_of_seeds_to_try,
+                   n_jobs=number_of_process).fit(X)
+
+    labels = model.labels_
+    # indices of preferible words in each cluster
+    ordered_words = model.cluster_centers_.argsort()[:, ::-1]
+
+    result_dataFrame['Cluster'] = model.labels_
+
+    result_dataFrame.groupby("user_id").apply(lambda x: fi(x,e))
+
+    e = pd.DataFrame(e)
+
+    # Here just the column names are swapped
+    e.rename(columns={0: 'user_id', 1: 'Cluster'}, inplace=True)
+    e.drop_duplicates(inplace=True)
+
+    e.to_sql(name='recommenda', con=mydb, if_exists='replace', index=True)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect('/')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
