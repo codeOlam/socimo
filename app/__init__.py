@@ -10,8 +10,11 @@ app = Flask(__name__)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='app/static/')
 app.config.from_object(Config)
 
+#migrations directory for production
+MIGRATION_DIR = os.path.join('app', 'migrations')
+
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, directory=MIGRATION_DIR)
 
 login_manager = LoginManager(app)
 # login_manager.init_app(app)
