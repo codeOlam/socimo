@@ -1,1 +1,1 @@
-web: gunicorn socimo:socimo
+web: gunicorn socimo:app
