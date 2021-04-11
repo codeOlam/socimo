@@ -76,7 +76,7 @@
 					</div>
 				</li>
 				<li class="go-live">
-					<a href="live-stream.html" title="Go Live" data-toggle="tooltip">
+					<a href="#" title="Go Live" data-toggle="tooltip">
 						<i>
 							<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="18px"
 								height="18px">
@@ -86,7 +86,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="index.html" title="Home" data-toggle="tooltip">
+					<a href="/" title="Home" data-toggle="tooltip">
 						<i>
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
 								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -388,7 +388,7 @@
 									</a>
 								</div>
 								<div class="link-item">
-									<a href="" title="">
+									<a href="#" title="">
 										<i class="">
 											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -405,7 +405,7 @@
 									</a>
 								</div>
 								<div class="link-item">
-									<a href="" title="">
+									<a href="#" title="">
 										<i class="">
 											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -420,7 +420,7 @@
 									</a>
 								</div>
 								<div class="link-item">
-									<a href="blog.html" title="">
+									<a href="#" title="">
 										<i class=""><svg class="feather feather-layout" stroke-linejoin="round"
 												stroke-linecap="round" stroke-width="2" stroke="currentColor"
 												fill="none" viewBox="0 0 24 24" height="24" width="24"
@@ -433,7 +433,7 @@
 									</a>
 								</div>
 								<div class="link-item">
-									<a href="groups.html" title="">
+									<a href="#" title="">
 										<i class="">
 											<svg class="feather feather-users" stroke-linejoin="round"
 												stroke-linecap="round" stroke-width="2" stroke="currentColor"
@@ -452,7 +452,7 @@
 						</div>
 						<div class="col-lg-2">
 							<div class="user-inf">
-								<div class="folowerz">Followers: 204</div>
+								<div class="folowerz">Followers: {{ current_user.followers.count() }}</div>
 								<ul class="stars">
 									<li><i class="icofont-star"></i></li>
 									<li><i class="icofont-star"></i></li>
@@ -527,7 +527,7 @@
 											<i class="icofont-pen-alt-1"></i>
 											<input type="text" placeholder="Create New Post">
 										</form>
-										<ul class="upload-media">
+<!-- 										<ul class="upload-media">
 											<li>
 												<a href="#" title="">
 													<i><img src="static/images/image.png" alt=""></i>
@@ -546,7 +546,7 @@
 													<span>Live Stream</span>
 												</a>
 											</li>
-										</ul>
+										</ul> -->
 									</div>
 								</div><!-- create new post -->
 
