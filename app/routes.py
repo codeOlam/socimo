@@ -16,7 +16,7 @@ from sqlalchemy import create_engine
 from flask import Blueprint, redirect, render_template, flash, request, session, url_for
 from flask_login import login_required, current_user
 from app import db, app
-from app.forms import PostForm
+from app.forms import PostForm, FollowUnfollowForm
 from app.models import User, Post
 
 
@@ -42,13 +42,26 @@ def index():
 def newsfeed():
     #codeOlam fixed news feed view function
     session['user'] = current_user.name
+
+    #all users
+    users = get_users()
+
     form = PostForm()
     #Get all post to news feeds
     newsfeeds = Post.query.all()
 
+    #get id of clicked users
+
+
     #Todo: select post for user based on following user
 
-    return render_template('newsfeed.html', form=form, newsfeeds=newsfeeds)
+    FUform = FollowUnfollowForm()
+
+    return render_template('newsfeed.html', 
+                            form=form, 
+                            FUform=FUform,
+                            newsfeeds=newsfeeds, 
+                            users=users)
 
 
 def allowed_file(filename):
@@ -72,3 +85,53 @@ def add_post():
             flash('Post Created Succefully!')
         return redirect(url_for('newsfeed'))
     return redirect(url_for('login'))
+
+
+def get_users():
+    #This function will query the db to get all users
+    users = User.query.all()
+    return users
+
+@app.route('/follow/<email>', methods=['POST'])
+@login_required
+def follow(email):
+    form = FollowUnfollowForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=email).first() #get the specific user
+        print('user: ', user)
+        if user is None:
+            flash('User {} not found.'.format(email))
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You can not follow yourself!')
+            return redirect(url_for('newsfeed'))
+        current_user.follow(user)
+        flash('You are now following {}!'.format(email))
+        #Todo: change redirect to profile when it is created 
+        return redirect(url_for('newsfeed'))
+    else:
+        return redirect(url_for('newsfeeds'))
+
+
+@app.route('/unfollow/<email>', methods=['POST'])
+@login_required
+def unfollow(email):
+    form = FollowUnfollowForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=email).first()
+        print('user: ', user)
+        if user is None:
+            flash('User {} not found!'.format(email))
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You can not unfollow yourself!')
+            return redirect(url_for('index'))
+            #Todo: change return redirect to profile of user when created
+        current_user.unfollow(user)
+        db.session.commit()
+        flash('You are not following {}.'.format(email))
+        return redirect(url_for('newsfeed'))
+    else:
+        return redirect(url_for('index'))

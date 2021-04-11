@@ -576,7 +576,7 @@
 										</li>
 										
 									</ul> -->
-								</div>chat rooms
+								</div><!-- chat rooms -->
 								<div class="main-wraper">
 									<div class="user-post">
 										<div class="friend-info">
@@ -588,7 +588,31 @@
 												<span><i class="icofont-runner-alt-1"></i> Follow similar
 													People</span>
 											</div>
-											<ul class="suggested-caro friends_suggestions"></ul> 
+									<!-- <ul class="suggested-caro friends_suggestions"></ul> -->
+
+									<ul class="chat-rooms ">
+										{% for user in users %}
+										<li>
+											<div class="room-avatar">
+												<img src="static/images/resources/user2.jpg" alt="">
+												<!-- <span class="status online"></span> -->
+											</div>
+											<span>{{user.name}}</span>
+											{% if not current_user.is_following(user) %}
+											<form action="{{ url_for('follow', email=user.email) }}" method="post">
+												{{ form.hidden_tag() }}
+												{{ form.submit(value='Follow') }}
+											<!-- <a class="join" href="/follow/{{user.id}}" title="Follow">Follow</a> -->
+											</form>
+											{% else %}
+											<form action="{{ url_for('unfollow', email=user.email) }}", method="post">
+												{{ form.hidden_tag() }}
+												{{ form.submit(value='Unfollow') }}
+											</form>
+											{% endif %}
+										</li>
+										{% endfor %}
+									</ul>
 										</div>
 									</div>
 								</div><!-- suggested friends -->

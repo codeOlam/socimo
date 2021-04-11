@@ -54,3 +54,7 @@ class PostForm(FlaskForm):
 
     content = TextAreaField('Content')
     submit = SubmitField('Publish')
+
+
+class FollowUnfollowForm(FlaskForm):
+    submit = SubmitField('Submit')

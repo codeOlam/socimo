@@ -6,6 +6,14 @@ from datetime import datetime
 from app import db
 
 
+#followers function
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'))
+    )
+
+
+
 class User(UserMixin, db.Model):
     """User account model."""
 
@@ -19,6 +27,11 @@ class User(UserMixin, db.Model):
     created_on = db.Column(db.DateTime, default=datetime.utcnow, index=False, unique=False, nullable=True)
     last_login = db.Column(db.DateTime, index=False, unique=False, nullable=True)
     posts = db.relationship('Post', backref='user', lazy=True)
+    followed = db.relationship('User', secondary=followers,
+                                        primaryjoin=(followers.c.follower_id == id),
+                                        secondaryjoin=(followers.c.followed_id == id),
+                                        backref=db.backref('followers', lazy='dynamic'),
+                                        lazy='dynamic')
 
     def set_password(self, password):
         """Create hashed password."""
@@ -27,6 +40,22 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         """Check hashed password."""
         return check_password_hash(self.password, password)
+
+
+    def is_following(self, user):
+        #make sure a user does not follow same user mulpitle times
+        return self.followed.filter(followers.c.followed_id==user.id).count()>0
+
+    def follow(self, user):
+        #Function will allow user follow another user
+        if not self.is_following(user):
+            self.followed.append(user)
+            db.session.commit() #commit to db
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+            db.session.commit()
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
