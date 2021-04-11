@@ -40,28 +40,25 @@ def index():
 
 @app.route('/news_feed', methods=['GET', 'POST'])
 def newsfeed():
-    #codeOlam fixed news feed view function
-    session['user'] = current_user.name
+    if current_user.is_authenticated:
+        #codeOlam fixed news feed view function
+        session['user'] = current_user.name
+        #all users
+        users = get_users()
+        form = PostForm()
+        #Get all post to news feeds
+        newsfeeds = Post.query.all()
 
-    #all users
-    users = get_users()
-
-    form = PostForm()
-    #Get all post to news feeds
-    newsfeeds = Post.query.all()
-
-    #get id of clicked users
-
-
-    #Todo: select post for user based on following user
-
-    FUform = FollowUnfollowForm()
-
-    return render_template('newsfeed.html', 
+        #get id of clicked users
+        #Todo: select post for user based on following user
+        FUform = FollowUnfollowForm()
+        return render_template('newsfeed.html', 
                             form=form, 
                             FUform=FUform,
                             newsfeeds=newsfeeds, 
                             users=users)
+    else:
+        return redirect(url_for('login'))
 
 
 def allowed_file(filename):
