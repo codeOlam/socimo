@@ -56,13 +56,13 @@ def signup():
         return redirect(url_for('newsfeed'))
 
     form = SignupForm()
-    if request.method == 'POST':
-        #This is to help store files in b'' and save directly to db
-        pic = request.files['photo'].read()
+    # if request.method == 'POST':
+    #     #This is to help store files in b'' and save directly to db
+    #     pic = request.files['photo'].read()
 
     if form.validate_on_submit():
         print('validating...')
-        user = User(name=form.name.data, email=form.email.data, photo=pic)
+        user = User(name=form.name.data, email=form.email.data) #, photo=pic
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
