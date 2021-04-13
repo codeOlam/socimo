@@ -49,6 +49,8 @@ def newsfeed():
         #Get all post to news feeds
         newsfeeds = Post.query.all()
 
+        #ToDo: send all new post to update pd dataframe
+
         #get id of clicked users
         #Todo: select post for user based on following user
         FUform = FollowUnfollowForm()
