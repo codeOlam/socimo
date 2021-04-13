@@ -20,4 +20,4 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 
-from app import models, routes, auth
+from app import models, routes, auth, class_cluster
