@@ -37,7 +37,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(url_for('newsfeed'))
         flash('Invalid username/password combination')
-        return redirect(url_for('auth_bp.login'))
+        return redirect(url_for('login'))
     return render_template('login.html', title='Log in.', form=form)
 
 
