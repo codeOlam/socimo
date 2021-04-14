@@ -56,9 +56,10 @@ def clean_post(df, text):
 	print('post_df.lower()\n', df[text])
 	
 	#Remove all unnecessary characters
-	df[text] = df[text].apply(lambda elem: re.sub(r"(@[A-Za-z0–9]+)|([0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?",
+	df[text] = df[text].apply(lambda elem: re.sub(r"(@[A-Za-z0–9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?",
 			"",
 			elem))
+	print('df[text]\n', df[text])
 
 	return df
 
