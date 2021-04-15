@@ -34,18 +34,18 @@ def post_to_df():
 	#Defining the query
 	# post_query = db.session.query(Post).with_entities(Post.user_id, Post.content)
 	post_query = qs = db.session.query(User.name, Post.content).join(User)
-	print('Post Query\n',post_query)
+	# print('Post Query\n',post_query)
 
 	#getting all post entries
 	post_qs = post_query.all()
-	print('Post Query Set\n',post_qs)
+	# print('Post Query Set\n',post_qs)
 
 	#Provide alternate col name and set index
 	# posts_to_df = pd.DataFrame.from_records(post_qs, 
 	# 									index='name', 
 	# 									columns=['name','content'])
 	posts_to_df = pd.DataFrame([(d.name, d.content) for d in post_qs], columns=['name', 'content'])
-	print('Post DataFrame\n', posts_to_df)
+	# print('Post DataFrame\n', posts_to_df)
 
 	return posts_to_df
 
@@ -60,19 +60,19 @@ def clean_post(df, text):
 	"""
 	#Convert all case to lower case.
 	df[text] = df[text].str.lower()
-	print('post_df.lower()\n', df[text])
+	# print('post_df.lower()\n', df[text])
 	
 	#Remove all unnecessary characters
 	df[text] = df[text].apply(lambda elem: re.sub(r"(@[A-Za-z0–9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?",
 			"",
 			elem))
-	print('df[text]\n', df[text])
+	# print('df[text]\n', df[text])
 
 	return df
 
 post_df = clean_post(post_df, 'content')
 post_clean_list = post_df.content.to_list()
-print('\nCleaned Post to List: \n', post_clean_list, '\n')
+# print('\nCleaned Post to List: \n', post_clean_list, '\n')
 
 
 def tidy_up(text):
@@ -194,7 +194,7 @@ data = {'name': points_df.names.to_list(),
 
 cate_df = pd.DataFrame(data)
 
-print('\ncategory\n', cate_df, '\n')
+# print('\ncategory\n', cate_df, '\n')
 
 #Grouping Post by user
 u_group_df = cate_df.groupby(['name']).sum()
@@ -261,34 +261,39 @@ k_data_df = pd.DataFrame(k_data).values
 
 # print('\n\t\tk_data_df\n', k_data_df)
 
-kmeans.fit(k_data_df)
+kmeans = kmeans.fit(k_data_df)
 
-# print('\nkmeans.fit(k_data_df): ', kmeans.fit(k_data_df))
 
 cluster_num = kmeans.predict(k_data_df)
-print('\ncluster_num): ', cluster_num)
+# print('\ncluster_num): ', cluster_num)
 
 labels = kmeans.labels_
-print('\nlabels: ', labels)
+# print('\nlabels: ', labels)
 
 cluster_centres = kmeans.cluster_centers_
-print('\ncluster_centres: ', cluster_centres)
+# print('\ncluster_centres: ', cluster_centres)
 labels_unique = np.unique(labels)
-print('\nlabels_unique', labels_unique)
+# print('\nlabels_unique', labels_unique)
 
 lenlb = len(labels_unique)
 label_elem = np.zeros([lenlb])
-print('\nlabel_elem: ', label_elem)
+# print('\nlabel_elem: ', label_elem)
+
+#categoraization
+heal_ = ['h' if h >=1 else h for h in heal]
+poli_ = ['p' if p >=1 else p for p in poli]
+sec_ = ['s' if s >=1 else s for s in sec]
+eco_ = ['ec' if ec >=1 else ec for ec in eco]
 
 
 cluster_post_data = {'User_name': post_df["name"],
 					# 'Post': post_df["content"],
 					'Cluster_Num': cluster_num,
 					'Cleaned_Post': post_clean_list,
-					'health':heal,
-					'politics': poli,
-					'security': sec,
-					'economic': eco
+					'health':heal_,
+					'politics': poli_,
+					'security': sec_,
+					'economic': eco_
 					}
 
 # print('\ncluster_post_data: \n', cluster_post_data)
@@ -298,23 +303,45 @@ cluster_post_df = pd.DataFrame(cluster_post_data)
 print('\nCluster in DF\n',cluster_post_df)
 
 
-#Grouping Cluster by number
-cluster_gp = cluster_post_df.groupby('User_name').sum()
-print('\n\t\t**************Grouping Cluster By Number*******************\n', cluster_gp)
+# #Grouping Cluster by number
+# cluster_gp = cluster_post_df.groupby('User_name').sum()
+# print('\n\t\t**************Grouping Cluster By Number*******************\n', cluster_gp)
 
-#getting users with post on security
-sec_post_data = {'User_name': post_df.name.to_list(),
-				'Cleaned_Post': post_clean_list,
-				'Cluster_num': cluster_num,
-				'security': sec,}
-sec_post_df = pd.DataFrame(sec_post_data)
-print('\nCluster in DF\n',cluster_post_df)
+try:
+	heal_cluster_group = cluster_post_df.groupby('health')
+	get_heal_cluster = heal_cluster_group.get_group('h')
+	print('\n\t\t**************Health_cluster_group*******************\n', get_heal_cluster)
+except KeyError:
+	print('\n\t\t**************Health_cluster_group*******************\n')
+	print('\nNo posts Found in this Cluster!')
 
-sec_cluster_group = sec_post_df.groupby('User_name', 'Cleaned_Post').sum()
-print('\n\t\t**************sec_cluster_group*******************\n', sec_cluster_group)
+try:	
+	poli_cluster_group = cluster_post_df.groupby('politics')
+	get_poli_cluster = poli_cluster_group.get_group('p')
+	print('\n\t\t**************Politics_cluster_group*******************\n', get_poli_cluster)
+except KeyError:
+	print('\n\t\t**************Politics_cluster_group*******************\n')
+	print('\nNo posts Found in this Cluster!')
+
+try:
+	sec_cluster_group = cluster_post_df.groupby('security')
+	get_sec_cluster = sec_cluster_group.get_group('s')
+	print('\n\t\t**************Security_cluster_group*******************\n', get_sec_cluster)
+except KeyError:
+	print('\n\t\t**************Security_cluster_group*******************\n')
+	print('\nNo posts Found in this Cluster!')
+
+try:
+	eco_cluster_group = cluster_post_df.groupby('economic')
+	get_eco_cluster = eco_cluster_group.get_group('ec')
+	print('\n\t\t**************Economy_cluster_group*******************\n', get_sec_cluster)
+except KeyError:
+	print('\n\t\t**************Economy_cluster_group*******************\n')
+	print('\nNo posts Found in this Cluster!')
+
 
 elem_cluster = np.bincount(labels)
-print('\nElement Cluster\n', elem_cluster)
+# print('\nElement Cluster\n', elem_cluster)
 
 for i in labels_unique:
 	label_elem[i]=0
