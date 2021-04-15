@@ -6,6 +6,10 @@ from nltk.tokenize import RegexpTokenizer, WhitespaceTokenizer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import string
+from sklearn.cluster import KMeans
+import numpy as np
+import sklearn.metrics as metrics
+from scipy.spatial import distance
 
 from app import db
 from app.models import Post, User
@@ -67,6 +71,8 @@ def clean_post(df, text):
 	return df
 
 post_df = clean_post(post_df, 'content')
+post_clean_list = post_df.content.to_list()
+print('\nCleaned Post to List: \n', post_clean_list, '\n')
 
 
 def tidy_up(text):
@@ -205,3 +211,137 @@ print('\n\t\t\tDataFrame\n', u_group_df, '\n')
 u_group_df.loc["Total"] = u_group_df.sum()
 
 print('\n\t\t\tFinished DataFrame\n', u_group_df, '\n')
+
+
+#Implementing K-Mean Algorithm
+def bic_cal(kmeans, Arr):
+	"""
+	Calculate the Bayesian information criterion
+	"""
+	centers = [kmeans.cluster_centers_]
+	labels = kmeans.labels_
+
+	#Cluster Numbers
+	m = kmeans.n_clusters
+	#Cluster size
+	n = np.bincount(labels)
+	#size of post dataset
+	N, d = Arr.shape
+
+	#Calculating variance for all clusters beforehand
+	cal_var = (1.0 / (N - m) / d) * sum([sum(distance.cdist(Arr[np.where(labels == i)], [centers[0][i]], 'euclidean')**2) for i in range(m)])
+	const_term = 0.5*m*np.log(N)*(d+1)
+
+	BIC = np.sum([n[i]*np.log(n[i]) - n[i]*np.log(N) - ((n[i] * d) / 2) * np.log(2*np.pi*cal_var) - \
+		((n[i] - 1) * d/ 2) for i in range(m)]) - const_term
+
+	return (BIC)
+
+print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
+n_clst = 4
+
+kmeans = KMeans(n_clusters=n_clst, 
+				init='k-means++', 
+				random_state=0, 
+				max_iter=100, 
+				n_init=10,
+				verbose=True)
+
+# print("\nClustering sparse data with %s" % kmeans)
+
+#Setting Data values for k-mean fitting
+k_data = {'health':heal,
+		'politics': poli,
+		'security': sec,
+		'economic': eco}
+
+# print('k_data: ',k_data)
+
+k_data_df = pd.DataFrame(k_data).values
+
+# print('\n\t\tk_data_df\n', k_data_df)
+
+kmeans.fit(k_data_df)
+
+# print('\nkmeans.fit(k_data_df): ', kmeans.fit(k_data_df))
+
+cluster_num = kmeans.predict(k_data_df)
+print('\ncluster_num): ', cluster_num)
+
+labels = kmeans.labels_
+print('\nlabels: ', labels)
+
+cluster_centres = kmeans.cluster_centers_
+print('\ncluster_centres: ', cluster_centres)
+labels_unique = np.unique(labels)
+print('\nlabels_unique', labels_unique)
+
+lenlb = len(labels_unique)
+label_elem = np.zeros([lenlb])
+print('\nlabel_elem: ', label_elem)
+
+
+cluster_post_data = {'User_name': post_df["name"],
+					# 'Post': post_df["content"],
+					'Cluster_Num': cluster_num,
+					'Cleaned_Post': post_clean_list,
+					'health':heal,
+					'politics': poli,
+					'security': sec,
+					'economic': eco
+					}
+
+# print('\ncluster_post_data: \n', cluster_post_data)
+
+#set to df
+cluster_post_df = pd.DataFrame(cluster_post_data)
+print('\nCluster in DF\n',cluster_post_df)
+
+
+#Grouping Cluster by number
+cluster_gp = cluster_post_df.groupby('User_name').sum()
+print('\n\t\t**************Grouping Cluster By Number*******************\n', cluster_gp)
+
+#getting users with post on security
+sec_post_data = {'User_name': post_df.name.to_list(),
+				'Cleaned_Post': post_clean_list,
+				'Cluster_num': cluster_num,
+				'security': sec,}
+sec_post_df = pd.DataFrame(sec_post_data)
+print('\nCluster in DF\n',cluster_post_df)
+
+sec_cluster_group = sec_post_df.groupby('User_name', 'Cleaned_Post').sum()
+print('\n\t\t**************sec_cluster_group*******************\n', sec_cluster_group)
+
+elem_cluster = np.bincount(labels)
+print('\nElement Cluster\n', elem_cluster)
+
+for i in labels_unique:
+	label_elem[i]=0
+
+	for l in labels:
+		if l == i:
+			label_elem[i] +=1
+	# print('Label = ', i, ' Number of Elements = ', label_elem[i])
+
+num_post = len(post_df.content)
+# print('\nNumber of Posts: ', num_post)
+
+samp_size = min(num_post, 10)
+
+# print('\nSample Size: ',samp_size)
+
+silh_score = metrics.silhouette_score(k_data_df, labels, 
+									metric='euclidean', 
+									sample_size=samp_size)
+
+# print("\nSilhouette score = ", round(silh_score, 3), "  for Sample Size = ", samp_size)
+
+
+cluster_arry = np.asmatrix(k_data_df)
+
+# print('\ncluster array\n', cluster_arry)
+
+BIC = bic_cal(kmeans, cluster_arry)
+
+# print('\nBayesian Information criterion score: ', BIC)
