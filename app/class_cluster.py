@@ -216,28 +216,28 @@ print('\n\t\t\tFinished DataFrame\n', u_group_df, '\n')
 
 
 #Implementing K-Mean Algorithm
-def bic_cal(kmeans, Arr):
-	"""
-	Calculate the Bayesian information criterion
-	"""
-	centers = [kmeans.cluster_centers_]
-	labels = kmeans.labels_
+# def bic_cal(kmeans, Arr):
+# 	"""
+# 	Calculate the Bayesian information criterion
+# 	"""
+# 	centers = [kmeans.cluster_centers_]
+# 	labels = kmeans.labels_
 
-	#Cluster Numbers
-	m = kmeans.n_clusters
-	#Cluster size
-	n = np.bincount(labels)
-	#size of post dataset
-	N, d = Arr.shape
+# 	#Cluster Numbers
+# 	m = kmeans.n_clusters
+# 	#Cluster size
+# 	n = np.bincount(labels)
+# 	#size of post dataset
+# 	N, d = Arr.shape
 
-	#Calculating variance for all clusters beforehand
-	cal_var = (1.0 / (N - m) / d) * sum([sum(distance.cdist(Arr[np.where(labels == i)], [centers[0][i]], 'euclidean')**2) for i in range(m)])
-	const_term = 0.5*m*np.log(N)*(d+1)
+# 	#Calculating variance for all clusters beforehand
+# 	cal_var = (1.0 / (N - m) / d) * sum([sum(distance.cdist(Arr[np.where(labels == i)], [centers[0][i]], 'euclidean')**2) for i in range(m)])
+# 	const_term = 0.5*m*np.log(N)*(d+1)
 
-	BIC = np.sum([n[i]*np.log(n[i]) - n[i]*np.log(N) - ((n[i] * d) / 2) * np.log(2*np.pi*cal_var) - \
-		((n[i] - 1) * d/ 2) for i in range(m)]) - const_term
+# 	BIC = np.sum([n[i]*np.log(n[i]) - n[i]*np.log(N) - ((n[i] * d) / 2) * np.log(2*np.pi*cal_var) - \
+# 		((n[i] - 1) * d/ 2) for i in range(m)]) - const_term
 
-	return (BIC)
+# 	return (BIC)
 
 print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
 n_clst = 4
@@ -372,6 +372,6 @@ cluster_arry = np.asmatrix(k_data_df)
 
 # print('\ncluster array\n', cluster_arry)
 
-BIC = bic_cal(kmeans, cluster_arry)
+# BIC = bic_cal(kmeans, cluster_arry)
 
 # print('\nBayesian Information criterion score: ', BIC)
