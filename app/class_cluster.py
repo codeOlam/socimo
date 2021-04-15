@@ -33,7 +33,7 @@ def post_to_df():
 	# get queries of all post and store in pd_dataframe
 	#Defining the query
 	# post_query = db.session.query(Post).with_entities(Post.user_id, Post.content)
-	post_query = qs = db.session.query(User.name, Post.content).join(User)
+	post_query = qs = db.session.query(User.id, User.name, Post.content).join(User)
 	# print('Post Query\n',post_query)
 
 	#getting all post entries
@@ -44,8 +44,8 @@ def post_to_df():
 	# posts_to_df = pd.DataFrame.from_records(post_qs, 
 	# 									index='name', 
 	# 									columns=['name','content'])
-	posts_to_df = pd.DataFrame([(d.name, d.content) for d in post_qs], columns=['name', 'content'])
-	# print('Post DataFrame\n', posts_to_df)
+	posts_to_df = pd.DataFrame([(d.id, d.name, d.content) for d in post_qs], columns=['user_id', 'name', 'content'])
+	print('Post DataFrame\n', posts_to_df)
 
 	return posts_to_df
 
@@ -140,7 +140,8 @@ s_points = sim_scores(security, post_df.content.to_list())
 e_points = sim_scores(economy, post_df.content.to_list())
 
 #Creating a DF for Jaccard Scores
-data = {'names': post_df.name.to_list(),
+data = {'user_id': post_df.user_id.to_list(),
+		'names': post_df.name.to_list(),
 		'health_point':h_points,
 		'politics_point':p_points,
 		'security_point':s_points,
@@ -148,10 +149,10 @@ data = {'names': post_df.name.to_list(),
 
 points_df = pd.DataFrame(data)
 print('')
-print('data\n',points_df)
+# print('data\n',points_df)
 
 #Assigining Categories based on Highest point
-def fetch_cate(h1,h2,h3,h4):
+def fetch_cate(h1, h2, h3, h4):
 	heal = []
 	poli = []
 	sec = []
@@ -185,7 +186,8 @@ h4 = points_df.economic_point.to_list()
 
 heal, poli, sec, eco = fetch_cate(h1, h2, h3, h4)
 
-data = {'name': points_df.names.to_list(),
+data = {'user_id': post_df.user_id.to_list(),
+		'name': points_df.names.to_list(),
 		'health':heal,
 		'politics': poli,
 		'security': sec,
@@ -197,7 +199,7 @@ cate_df = pd.DataFrame(data)
 # print('\ncategory\n', cate_df, '\n')
 
 #Grouping Post by user
-u_group_df = cate_df.groupby(['name']).sum()
+u_group_df = cate_df.groupby(['user_id','name'])[["health", "politics", "security", "economic"]].sum()
 print('\n\t\t\tGrouping by user\n', u_group_df, '\n')
 
 #Adding a new column Total to get sum of user post
@@ -286,7 +288,8 @@ sec_ = ['s' if s >=1 else s for s in sec]
 eco_ = ['ec' if ec >=1 else ec for ec in eco]
 
 
-cluster_post_data = {'User_name': post_df["name"],
+cluster_post_data = {'user_id': post_df.user_id.to_list(),
+					'User_name': post_df["name"],
 					# 'Post': post_df["content"],
 					'Cluster_Num': cluster_num,
 					'Cleaned_Post': post_clean_list,
