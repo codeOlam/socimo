@@ -2,20 +2,14 @@ import os
 from flask import Flask, render_template, redirect, request, session, json, jsonify
 from werkzeug.utils import secure_filename
 from config import Config
-
-
-import pandas as pd
-import unicodedata
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import KMeans
-import numpy
-from pandas.io import sql
 from sqlalchemy import create_engine
+import pandas as pd
 
 #code added by codeOlam
 from flask import Blueprint, redirect, render_template, flash, request, session, url_for
 from flask_login import login_required, current_user
 from app import db, app
+from app import class_cluster as cc
 from app.forms import PostForm, FollowUnfollowForm
 from app.models import User, Post
 
@@ -45,10 +39,12 @@ def newsfeed():
         session['user'] = current_user.name
         #all users
         users = get_users()
+        users_in_heal_cluster = suggestUser()
         form = PostForm()
         #Get all post to news feeds
         newsfeeds = Post.query.all()
 
+        # suggestUser()
         #ToDo: send all new post to update pd dataframe
 
         #get id of clicked users
@@ -58,7 +54,8 @@ def newsfeed():
                             form=form, 
                             FUform=FUform,
                             newsfeeds=newsfeeds, 
-                            users=users)
+                            users=users,
+                            users_in_heal_cluster=users_in_heal_cluster)
     else:
         return redirect(url_for('login'))
 
@@ -110,7 +107,7 @@ def follow(email):
         #Todo: change redirect to profile when it is created 
         return redirect(url_for('newsfeed'))
     else:
-        return redirect(url_for('newsfeeds'))
+        return redirect(url_for('newsfeed'))
 
 
 @app.route('/unfollow/<email>', methods=['POST'])
@@ -134,3 +131,33 @@ def unfollow(email):
         return redirect(url_for('newsfeed'))
     else:
         return redirect(url_for('index'))
+
+
+def suggestUser():
+    """
+    This function will sugget user based on post made
+    """
+    print("\nIn suggestion Function")
+    user_in_heal_list = []
+    u_id = current_user.id
+
+    #check if users post is in health cluster
+    #get health cluster
+    heal_cluster = cc.get_heal_cluster
+    #get user_id column and save to list
+    col_id_list = heal_cluster.user_id.to_list()
+    print('col_id_list: ', col_id_list)
+    #Check if user_id is in list
+    if u_id in col_id_list:
+        all_user_id = pd.unique(col_id_list).tolist()
+        print('all_user_id, :', all_user_id)
+        for i in all_user_id:
+            if u_id != i:
+                users_in_heal = User.query.filter_by(id=i).first()
+                print("users_in_heal: ", users_in_heal)
+                user_in_heal_list.append(users_in_heal)
+        print('user_in_heal_list: ', user_in_heal_list)
+        print('users_in_heal: ', users_in_heal)
+
+    return user_in_heal_list
+
