@@ -42,17 +42,26 @@ def newsfeed():
         users = get_users()
         try:
             users_in_heal_cluster = suggestUser(u_id, cc.get_heal_cluster)
-            users_in_poli_cluster = suggestUser(u_id, cc.get_poli_cluster)
-            user_in_sec_cluster = suggestUser(u_id, cc.get_sec_cluster)
-            # user_in_eco_cluster = suggestUser(u_id, cc.get_eco_cluster)
-
-
         except AttributeError as e:
             users_in_heal_cluster = ''
+            print ('User not in any cluster yet!\n', e)
+
+        try:
+            users_in_poli_cluster = suggestUser(u_id, cc.get_poli_cluster)
+        except AttributeError as e:
             users_in_poli_cluster = ''
+            print ('User not in any cluster yet!\n', e)
+        try:
+            user_in_sec_cluster = suggestUser(u_id, cc.get_sec_cluster)
+        except AttributeError as e:
             user_in_sec_cluster = ''
-            # user_in_eco_cluster = ''
-            print ('User not in any cluster yet!', e)
+            print ('User not in any cluster yet!\n', e)
+        try:
+            user_in_eco_cluster = suggestUser(u_id, cc.get_eco_cluster)
+        except AttributeError as e:
+            user_in_eco_cluster = ''
+            print ('User not in any cluster yet!\n', e)
+            
 
         form = PostForm()
         #Get all post to news feeds
