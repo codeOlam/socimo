@@ -181,7 +181,7 @@ def suggestUser(u_id, get_cluster):
                 print("users_in_cluster: ", users_in_cluster)
                 user_in_clust_list.append(users_in_cluster)
         print('user_in_clust_list: ', user_in_clust_list)
-        print('users_in_cluster: ', users_in_cluster)
+        # print('users_in_cluster: ', users_in_cluster)
 
     return user_in_clust_list
 

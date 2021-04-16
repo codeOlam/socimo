@@ -18,4 +18,4 @@ security_related_words = '''gunmen kidnap killed attacked robbery cultist gunsho
 economic_related_words = '''banks CBN cbn money fund naira dollar btc bitcion crypto cash 
 							liquidated transfer wired buy sell stockmarket stock exchange wallet 
 							budget transfer account currency trading rate centralbanks wto worldbank
-							sec finance investment investor housing '''
+							sec finance investment investor housing'''
