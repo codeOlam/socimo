@@ -339,7 +339,6 @@ try:
 	get_eco_cluster = eco_cluster_group.get_group('ec')
 	print('\n\t\t**************Economy_cluster_group*******************\n', get_sec_cluster)
 except KeyError:
-	get_eco_cluster=''
 	print('\n\t\t**************Economy_cluster_group*******************\n')
 	print('\nNo posts Found in this Cluster!')
 
