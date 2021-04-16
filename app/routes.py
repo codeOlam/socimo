@@ -37,9 +37,23 @@ def newsfeed():
     if current_user.is_authenticated:
         #codeOlam fixed news feed view function
         session['user'] = current_user.name
+        u_id = current_user.id
         #all users
         users = get_users()
-        users_in_heal_cluster = suggestUser()
+        try:
+            users_in_heal_cluster = suggestUser(u_id, cc.get_heal_cluster)
+            users_in_poli_cluster = suggestUser(u_id, cc.get_poli_cluster)
+            user_in_sec_cluster = suggestUser(u_id, cc.get_sec_cluster)
+            # user_in_eco_cluster = suggestUser(u_id, cc.get_eco_cluster)
+
+
+        except AttributeError as e:
+            users_in_heal_cluster = ''
+            users_in_poli_cluster = ''
+            user_in_sec_cluster = ''
+            # user_in_eco_cluster = ''
+            print ('User not in any cluster yet!', e)
+
         form = PostForm()
         #Get all post to news feeds
         newsfeeds = Post.query.all()
@@ -55,7 +69,9 @@ def newsfeed():
                             FUform=FUform,
                             newsfeeds=newsfeeds, 
                             users=users,
-                            users_in_heal_cluster=users_in_heal_cluster)
+                            clusterd_user=users_in_heal_cluster,
+                            users_in_poli_cluster=users_in_poli_cluster,
+                            user_in_sec_cluster=user_in_sec_cluster)
     else:
         return redirect(url_for('login'))
 
@@ -133,19 +149,18 @@ def unfollow(email):
         return redirect(url_for('index'))
 
 
-def suggestUser():
+def suggestUser(u_id, get_cluster):
     """
     This function will sugget user based on post made
     """
     print("\nIn suggestion Function")
-    user_in_heal_list = []
-    u_id = current_user.id
+    user_in_clust_list = []
 
     #check if users post is in health cluster
     #get health cluster
-    heal_cluster = cc.get_heal_cluster
+    cluster = get_cluster
     #get user_id column and save to list
-    col_id_list = heal_cluster.user_id.to_list()
+    col_id_list = cluster.user_id.to_list()
     print('col_id_list: ', col_id_list)
     #Check if user_id is in list
     if u_id in col_id_list:
@@ -153,11 +168,11 @@ def suggestUser():
         print('all_user_id, :', all_user_id)
         for i in all_user_id:
             if u_id != i:
-                users_in_heal = User.query.filter_by(id=i).first()
-                print("users_in_heal: ", users_in_heal)
-                user_in_heal_list.append(users_in_heal)
-        print('user_in_heal_list: ', user_in_heal_list)
-        print('users_in_heal: ', users_in_heal)
+                users_in_cluster = User.query.filter_by(id=i).first()
+                print("users_in_cluster: ", users_in_cluster)
+                user_in_clust_list.append(users_in_cluster)
+        print('user_in_clust_list: ', user_in_clust_list)
+        print('users_in_cluster: ', users_in_cluster)
 
-    return user_in_heal_list
+    return user_in_clust_list
 
