@@ -181,7 +181,6 @@
 											<form action="{{ url_for('follow', email=user.email) }}" method="post">
 												{{ form.hidden_tag() }}
 												{{ form.submit(value='Follow', style='float: right; margin-buttom: 0.1rem;') }}
-											<!-- <a class="join" href="/follow/{{user.id}}" title="Follow">Follow</a> -->
 											</form>
 											{% else %}
 											<form action="{{ url_for('unfollow', email=user.email) }}", method="post">
@@ -253,7 +252,6 @@
 											<form action="{{ url_for('follow', email=user.email) }}" method="post">
 												{{ form.hidden_tag() }}
 												{{ form.submit(value='Follow', style='float: right; margin-buttom: 0.1rem;') }}
-											<!-- <a class="join" href="/follow/{{user.id}}" title="Follow">Follow</a> -->
 											</form>
 											{% else %}
 											<form action="{{ url_for('unfollow', email=user.email) }}", method="post">
@@ -271,7 +269,7 @@
 									</div><!-- whos following -->
 									{% endif %}
 
-<!-- 									{% if  user_in_eco_cluster %}
+									{% if  user_in_eco_cluster %}
 									<div class="widget stick-widget">
 										<h4 class="widget-title">Follow
 													People Posting Health Topic</h4>
@@ -288,8 +286,7 @@
 													{% if not current_user.is_following(user) %}
 											<form action="{{ url_for('follow', email=user.email) }}" method="post">
 												{{ form.hidden_tag() }}
-												{{ form.submit(value='Follow', style='float: right; margin-buttom: 0.1rem;') }} -->
-											<!-- <a class="join" href="/follow/{{user.id}}" title="Follow">Follow</a>
+												{{ form.submit(value='Follow', style='float: right; margin-buttom: 0.1rem;') }}
 											</form>
 											{% else %}
 											<form action="{{ url_for('unfollow', email=user.email) }}", method="post">
@@ -304,8 +301,8 @@
 										<ul class="followers friends_suggestions">
 
 										</ul>
-									</div> whos following
-									{% endif %} --> 
+									</div> <!-- whos following -->
+									{% endif %} 
 								</aside>
 							</div>
 						</div>
