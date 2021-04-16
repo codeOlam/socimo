@@ -361,9 +361,9 @@ samp_size = min(num_post, 10)
 
 # print('\nSample Size: ',samp_size)
 
-silh_score = metrics.silhouette_score(k_data_df, labels, 
-									metric='euclidean', 
-									sample_size=samp_size)
+# silh_score = metrics.silhouette_score(k_data_df, labels, 
+# 									metric='euclidean', 
+# 									sample_size=samp_size)
 
 # print("\nSilhouette score = ", round(silh_score, 3), "  for Sample Size = ", samp_size)
 

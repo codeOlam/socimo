@@ -6,11 +6,6 @@
 	<div class="authtication bluesh high-opacity">
 		<div class="verticle-center">
 			<div class="welcome-note">
-				<div class="logo"><img src="images/logo.png" alt=""><span>Socimo</span></div>
-				<h1>Welcome to Socimo</h1>
-				<p>
-					Socimo is a one and only plateform for the researcheres, students, and Acdamic people. Every one can join this plateform free and share his ideas and research with seniors and juniours comments and openions.
-				</p>
 			</div>
 			<div class="bg-image" style="background-image: url('static/images/resources/login-bg.png')"></div>
 		</div>
@@ -19,19 +14,13 @@
 		<div class="verticle-center">
 			<div class="signup-form">
 				<h4><i class="icofont-lock"></i> Singup</h4>
-				<form method="POST" class="c-form" action="" enctype="multipart/form-data">
-					<!-- added this to fix form validation issues -->
-					{{ form.hidden_tag() }}
-					
-
+				<form method="post" class="c-form" action="/signup" enctype="multipart/form-data">
 					<div class="row merged-10">
-						<div class="col-lg-12">
-							<h4>What type of researcher are you?</h4>
-						</div>
+						{{ form.hidden_tag() }}
 						<div class="col-lg-12 col-sm-12 col-md-12">
 							<fieldset class="email">
-						        {{ form.name.label }}
-						        {{ form.name(placeholder='John Smith') }}
+						        <!-- {{ form.name.label }} -->
+						        {{ form.name(placeholder='Name') }}
 						        {% if form.name.errors %}
 						          <ul class="errors">
 						            {% for error in form.email.errors %}
@@ -39,12 +28,11 @@
 						          </ul>
 						        {% endif %}								
 							</fieldset>
-							<!-- <input type="text" placeholder="Name" name="name" required> -->
 						</div>
 
 						<div class="col-lg-12 col-sm-12 col-md-12">
 							<fieldset class="email">
-						        {{ form.email.label }}
+						        <!-- {{ form.email.label }} -->
 						        {{ form.email(placeholder='youremail@example.com') }}
 						        {% if form.email.errors %}
 						          <ul class="errors">
@@ -53,12 +41,11 @@
 						          </ul>
 						        {% endif %}								
 							</fieldset>
-							<!-- <input type="text" placeholder="Email@" name="email" required> -->
 						</div>
 
-<!-- 						<div class="col-lg-12 col-sm-12 col-md-12">
-							<fieldset class="photo">
-								{{ form.photo.label }}
+						<div class="col-lg-12 col-sm-12 col-md-12">
+							<fieldset class="">
+								<!-- {{ form.photo.label }} -->
 								{{form.photo}}
 								{% if form.photo.errors %}
 									<ul class="errors">
@@ -68,12 +55,12 @@
 									</ul>
 								{% endif %}
 							</fieldset>
-						</div> -->
+						</div>
 
 						<div class="col-lg-12 col-sm-12 col-md-12">
 						<fieldset class="password">
-					        {{ form.password.label }}
-					        {{ form.password }}
+					        <!-- {{ form.password.label }} -->
+					        {{ form.password(placeholder='Enter Password') }}
 					        {% if form.password.errors %}
 					          <ul class="errors">
 					            {% for error in form.password.errors %}
@@ -81,13 +68,12 @@
 					          </ul>
 					        {% endif %}							
 						</fieldset>
-							<!-- <input type="password" placeholder="Password" name="password" required> -->
 						</div>
 						
 						<div class="col-lg-12 col-sm-12 col-md-12">
 						<fieldset class="confirm">
-					        {{ form.confirm.label }}
-					        {{ form.confirm }}
+					        <!-- {{ form.confirm.label }} -->
+					        {{ form.confirm(placeholder='Repeat Password') }}
 					        {% if form.confirm.errors %}
 					          <ul class="errors">
 					            {% for error in form.confirm.errors %}
@@ -95,18 +81,16 @@
 					          </ul>
 					        {% endif %}							
 						</fieldset>
-							<!-- <input type="password" placeholder="Password" name="password" required> -->
 						</div>
-						<div class="col-lg-12 submit-button">
-							{{ form.submit() }}
-							<!-- <button class="main-btn" type="submit"><i class="icofont-key"></i> Signup</button> -->
+
+						<div class="col-lg-12">
+							{{ form.submit(value="Signup", class="main-btn") }}
 						</div>
+
                         <div class="col-lg-12 mt-2">
                             Already have an account <a href="/login" class="text-success">Signin</a>
                         </div>
 					</div>
-					<br>
-					<br>
 				</form>
 			</div>
 		</div>
