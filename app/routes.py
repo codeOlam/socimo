@@ -40,28 +40,38 @@ def newsfeed():
         u_id = current_user.id
         #all users
         users = get_users()
+
+        #call class_cluster module 
+        print('calling cluster everytime feeds is called')
+        gh, gp, gs, ge = cc.kmean_clst()
+        # print('\nFrom newsfedd Func gh: \n', gh)
+        # print('\nFrom newsfedd Func gp: \n', gp)
+        # print('\nFrom newsfedd Func gs: \n', gs)
+        # print('\nFrom newsfedd Func ge: \n', ge)
+
         try:
-            users_in_heal_cluster = suggestUser(u_id, cc.get_heal_cluster)
+            users_in_heal_cluster = suggestUser(u_id, gh)
         except AttributeError as e:
             users_in_heal_cluster = ''
             print ('User not in any cluster yet!\n', e)
 
         try:
-            users_in_poli_cluster = suggestUser(u_id, cc.get_poli_cluster)
+            users_in_poli_cluster = suggestUser(u_id, gp)
         except AttributeError as e:
             users_in_poli_cluster = ''
             print ('User not in any cluster yet!\n', e)
         try:
-            user_in_sec_cluster = suggestUser(u_id, cc.get_sec_cluster)
+            user_in_sec_cluster = suggestUser(u_id, gs)
         except AttributeError as e:
             user_in_sec_cluster = ''
             print ('User not in any cluster yet!\n', e)
         try:
-            user_in_eco_cluster = suggestUser(u_id, cc.get_eco_cluster)
+            user_in_eco_cluster = suggestUser(u_id, ge)
         except AttributeError as e:
-            user_in_eco_cluster = ''
-            print ('User not in any cluster yet!\n', e)
-            
+            pass
+            # user_in_eco_cluster = ''
+            # print ('User not in any cluster yet!\n', e)
+
 
         form = PostForm()
         #Get all post to news feeds
@@ -80,7 +90,8 @@ def newsfeed():
                             users=users,
                             clusterd_user=users_in_heal_cluster,
                             users_in_poli_cluster=users_in_poli_cluster,
-                            user_in_sec_cluster=user_in_sec_cluster)
+                            user_in_sec_cluster=user_in_sec_cluster
+                            )
     else:
         return redirect(url_for('login'))
 

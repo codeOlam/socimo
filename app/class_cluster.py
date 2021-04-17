@@ -50,7 +50,7 @@ def post_to_df():
 	return posts_to_df
 
 
-post_df = post_to_df()
+# post_df = post_to_df()
 
 
 def clean_post(df, text):
@@ -70,8 +70,8 @@ def clean_post(df, text):
 
 	return df
 
-post_df = clean_post(post_df, 'content')
-post_clean_list = post_df.content.to_list()
+# post_df_ = clean_post(post_df, 'content')
+# post_clean_list = post_df_.content.to_list()
 # print('\nCleaned Post to List: \n', post_clean_list, '\n')
 
 
@@ -88,27 +88,31 @@ def tidy_up(text):
 
 	return " ".join(final_text)
 
-post_df.content =post_df.content.apply(tidy_up)
+# post_df_.content =post_df_.content.apply(tidy_up)
 
 
 #Cleaning up setwords
-health = tidy_up(sw.health_related_words)
-politics = tidy_up(sw.politics_related_words)
-security = tidy_up(sw.security_related_words)
-economic = tidy_up(sw.economic_related_words)
+def clean_setwords():
 
-#Dropping duplicates
-words =  health.split()
-health = " ".join(sorted(set(words), key=words.index))
+	health = tidy_up(sw.health_related_words)
+	politics = tidy_up(sw.politics_related_words)
+	security = tidy_up(sw.security_related_words)
+	economy = tidy_up(sw.economic_related_words)
 
-words = politics.split()
-politics = " ".join(sorted(set(words), key=words.index))
+	#Dropping duplicates
+	words =  health.split()
+	health = " ".join(sorted(set(words), key=words.index))
 
-words = security.split()
-security = " ".join(sorted(set(words), key=words.index))
+	words = politics.split()
+	politics = " ".join(sorted(set(words), key=words.index))
 
-words = economic.split()
-economy = " ".join(sorted(set(words), key=words.index))
+	words = security.split()
+	security = " ".join(sorted(set(words), key=words.index))
+
+	words = economy.split()
+	economy = " ".join(sorted(set(words), key=words.index))
+
+	return health, politics, security, economy
 
 
 
@@ -134,21 +138,21 @@ def sim_scores(group, content):
 
 #Comparing Post contents using jaccard similarity and 
 #Getting scores of all cluster points
-h_points = sim_scores(health, post_df.content.to_list())
-p_points = sim_scores(politics, post_df.content.to_list())
-s_points = sim_scores(security, post_df.content.to_list())
-e_points = sim_scores(economy, post_df.content.to_list())
+# h_points = sim_scores(health, post_df_.content.to_list())
+# p_points = sim_scores(politics, post_df_.content.to_list())
+# s_points = sim_scores(security, post_df_.content.to_list())
+# e_points = sim_scores(economy, post_df_.content.to_list())
 
-#Creating a DF for Jaccard Scores
-data = {'user_id': post_df.user_id.to_list(),
-		'names': post_df.name.to_list(),
-		'health_point':h_points,
-		'politics_point':p_points,
-		'security_point':s_points,
-		'economic_point':e_points}
+# #Creating a DF for Jaccard Scores
+# data = {'user_id': post_df.user_id.to_list(),
+# 		'names': post_df.name.to_list(),
+# 		'health_point':h_points,
+# 		'politics_point':p_points,
+# 		'security_point':s_points,
+# 		'economic_point':e_points}
 
-points_df = pd.DataFrame(data)
-print('')
+# points_df = pd.DataFrame(data)
+# print('')
 # print('data\n',points_df)
 
 #Assigining Categories based on Highest point
@@ -179,119 +183,115 @@ def fetch_cate(h1, h2, h3, h4):
 
 	return heal, poli, sec, eco
 
-h1 = points_df.health_point.to_list()
-h2 = points_df.politics_point.to_list()
-h3 = points_df.security_point.to_list()
-h4 = points_df.economic_point.to_list()
+# h1 = points_df.health_point.to_list()
+# h2 = points_df.politics_point.to_list()
+# h3 = points_df.security_point.to_list()
+# h4 = points_df.economic_point.to_list()
 
-heal, poli, sec, eco = fetch_cate(h1, h2, h3, h4)
+# heal, poli, sec, eco = fetch_cate(h1, h2, h3, h4)
 
-data = {'user_id': post_df.user_id.to_list(),
-		'name': points_df.names.to_list(),
-		'health':heal,
-		'politics': poli,
-		'security': sec,
-		'economic': eco}
+# data = {'user_id': post_df.user_id.to_list(),
+# 		'name': points_df.names.to_list(),
+# 		'health':heal,
+# 		'politics': poli,
+# 		'security': sec,
+# 		'economic': eco}
 
 
-cate_df = pd.DataFrame(data)
+# cate_df = pd.DataFrame(data)
 
 # print('\ncategory\n', cate_df, '\n')
 
 #Grouping Post by user
-u_group_df = cate_df.groupby(['user_id','name'])[["health", "politics", "security", "economic"]].sum()
-print('\n\t\t\tGrouping by user\n', u_group_df, '\n')
+# u_group_df = cate_df.groupby(['user_id','name'])[["health", "politics", "security", "economic"]].sum()
+# print('\n\t\t\tGrouping by user\n', u_group_df, '\n')
 
-#Adding a new column Total to get sum of user post
-u_group_df['total_post'] = u_group_df['health'] + u_group_df['politics'] + \
-					u_group_df['security'] + u_group_df['economic']
+# #Adding a new column Total to get sum of user post
+# u_group_df['total_post'] = u_group_df['health'] + u_group_df['politics'] + \
+# 					u_group_df['security'] + u_group_df['economic']
 
-print('\n\t\t\tDataFrame\n', u_group_df, '\n')
-
-
-#Adding a new row to get total posts in df
-u_group_df.loc["Total"] = u_group_df.sum()
-
-print('\n\t\t\tFinished DataFrame\n', u_group_df, '\n')
+# print('\n\t\t\tDataFrame\n', u_group_df, '\n')
 
 
-#Implementing K-Mean Algorithm
-# def bic_cal(kmeans, Arr):
-# 	"""
-# 	Calculate the Bayesian information criterion
-# 	"""
-# 	centers = [kmeans.cluster_centers_]
-# 	labels = kmeans.labels_
+# #Adding a new row to get total posts in df
+# u_group_df.loc["Total"] = u_group_df.sum()
 
-# 	#Cluster Numbers
-# 	m = kmeans.n_clusters
-# 	#Cluster size
-# 	n = np.bincount(labels)
-# 	#size of post dataset
-# 	N, d = Arr.shape
+# print('\n\t\t\tFinished DataFrame\n', u_group_df, '\n')
 
-# 	#Calculating variance for all clusters beforehand
-# 	cal_var = (1.0 / (N - m) / d) * sum([sum(distance.cdist(Arr[np.where(labels == i)], [centers[0][i]], 'euclidean')**2) for i in range(m)])
-# 	const_term = 0.5*m*np.log(N)*(d+1)
 
-# 	BIC = np.sum([n[i]*np.log(n[i]) - n[i]*np.log(N) - ((n[i] * d) / 2) * np.log(2*np.pi*cal_var) - \
-# 		((n[i] - 1) * d/ 2) for i in range(m)]) - const_term
+# print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
+# n_clst = 4
 
-# 	return (BIC)
-
-print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
-n_clst = 4
-
-kmeans = KMeans(n_clusters=n_clst, 
-				init='k-means++', 
-				random_state=0, 
-				max_iter=100, 
-				n_init=10,
-				verbose=True)
+# kmeans = KMeans(n_clusters=n_clst, 
+# 				init='k-means++', 
+# 				random_state=0, 
+# 				max_iter=100, 
+# 				n_init=10,
+# 				verbose=True)
 
 # print("\nClustering sparse data with %s" % kmeans)
 
 #Setting Data values for k-mean fitting
-k_data = {'health':heal,
-		'politics': poli,
-		'security': sec,
-		'economic': eco}
+# k_data = {'health':heal,
+# 		'politics': poli,
+# 		'security': sec,
+# 		'economic': eco}
 
-# print('k_data: ',k_data)
+# # print('k_data: ',k_data)
 
-k_data_df = pd.DataFrame(k_data).values
+# k_data_df = pd.DataFrame(k_data).values
 
-# print('\n\t\tk_data_df\n', k_data_df)
+# # print('\n\t\tk_data_df\n', k_data_df)
 
-kmeans = kmeans.fit(k_data_df)
+# kmeans = kmeans.fit(k_data_df)
 
 
-cluster_num = kmeans.predict(k_data_df)
-# print('\ncluster_num): ', cluster_num)
+# cluster_num = kmeans.predict(k_data_df)
+# # print('\ncluster_num): ', cluster_num)
 
-labels = kmeans.labels_
-# print('\nlabels: ', labels)
+# labels = kmeans.labels_
+# # print('\nlabels: ', labels)
 
-cluster_centres = kmeans.cluster_centers_
-# print('\ncluster_centres: ', cluster_centres)
-labels_unique = np.unique(labels)
-# print('\nlabels_unique', labels_unique)
+# cluster_centres = kmeans.cluster_centers_
+# # print('\ncluster_centres: ', cluster_centres)
+# labels_unique = np.unique(labels)
+# # print('\nlabels_unique', labels_unique)
 
-lenlb = len(labels_unique)
-label_elem = np.zeros([lenlb])
+# lenlb = len(labels_unique)
+# label_elem = np.zeros([lenlb])
 # print('\nlabel_elem: ', label_elem)
 
 #categoraization
-heal_ = ['h' if h >=1 else h for h in heal]
-poli_ = ['p' if p >=1 else p for p in poli]
-sec_ = ['s' if s >=1 else s for s in sec]
-eco_ = ['ec' if ec >=1 else ec for ec in eco]
+# heal_ = ['h' if h >=1 else h for h in heal]
+# poli_ = ['p' if p >=1 else p for p in poli]
+# sec_ = ['s' if s >=1 else s for s in sec]
+# eco_ = ['ec' if ec >=1 else ec for ec in eco]
+
+def set_clst_to_df(he, pol, se, ec, cn):
+	post_df = post_to_df()
+	post_df_ = clean_post(post_df, 'content')
+	post_df_.content =post_df_.content.apply(tidy_up)
+	post_clean_list = post_df_.content.to_list()
+
+	heal_ = ['h' if h >=1 else h for h in he]
+	poli_ = ['p' if p >=1 else p for p in pol]
+	sec_ = ['s' if s >=1 else s for s in se]
+	eco_ = ['ec' if ec >=1 else ec for ec in ec]
+
+	print('heal_: ', len(heal_))
+	print('poli_: ', len(poli_))
+	print('sec_: ', len(sec_))
+	print('eco_: ', len(eco_))
+	print('user_id: ', len(post_df.user_id.to_list()))
+	print('User_name: ', len(post_df["name"]))
+	print('Cluster_Num: ', len(cn))
+	print('post_clean_list: ', ' : ', len(post_clean_list))
 
 
-cluster_post_data = {'user_id': post_df.user_id.to_list(),
+	cluster_post_data = {'user_id': post_df.user_id.to_list(),
 					'User_name': post_df["name"],
 					# 'Post': post_df["content"],
-					'Cluster_Num': cluster_num,
+					'Cluster_Num': cn,
 					'Cleaned_Post': post_clean_list,
 					'health':heal_,
 					'politics': poli_,
@@ -299,79 +299,126 @@ cluster_post_data = {'user_id': post_df.user_id.to_list(),
 					'economic': eco_
 					}
 
-# print('\ncluster_post_data: \n', cluster_post_data)
+	# print('\ncluster_post_data: \n', cluster_post_data)
+	#set to df
+	clst_post_df = pd.DataFrame(cluster_post_data)
+	print('\nCluster in DF\n',clst_post_df)
 
-#set to df
-cluster_post_df = pd.DataFrame(cluster_post_data)
-print('\nCluster in DF\n',cluster_post_df)
+	return clst_post_df
 
 
 # #Grouping Cluster by number
 # cluster_gp = cluster_post_df.groupby('User_name').sum()
 # print('\n\t\t**************Grouping Cluster By Number*******************\n', cluster_gp)
 
-try:
-	heal_cluster_group = cluster_post_df.groupby('health')
-	get_heal_cluster = heal_cluster_group.get_group('h')
-	print('\n\t\t**************Health_cluster_group*******************\n', get_heal_cluster)
-except KeyError:
-	print('\n\t\t**************Health_cluster_group*******************\n')
-	print('\nNo posts Found in this Cluster!')
+def kmean_clst():
+	print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
 
-try:	
-	poli_cluster_group = cluster_post_df.groupby('politics')
-	get_poli_cluster = poli_cluster_group.get_group('p')
-	print('\n\t\t**************Politics_cluster_group*******************\n', get_poli_cluster)
-except KeyError:
-	print('\n\t\t**************Politics_cluster_group*******************\n')
-	print('\nNo posts Found in this Cluster!')
+	n_clst = 4
 
-try:
-	sec_cluster_group = cluster_post_df.groupby('security')
-	get_sec_cluster = sec_cluster_group.get_group('s')
-	print('\n\t\t**************Security_cluster_group*******************\n', get_sec_cluster)
-except KeyError:
-	print('\n\t\t**************Security_cluster_group*******************\n')
-	print('\nNo posts Found in this Cluster!')
+	kmeans = KMeans(n_clusters=n_clst, 
+					init='k-means++', 
+					random_state=0, 
+					max_iter=100, 
+					n_init=10,
+					verbose=True)
 
-try:
-	eco_cluster_group = cluster_post_df.groupby('economic')
-	get_eco_cluster = eco_cluster_group.get_group('ec')
-	print('\n\t\t**************Economy_cluster_group*******************\n', get_sec_cluster)
-except KeyError:
-	print('\n\t\t**************Economy_cluster_group*******************\n')
-	print('\nNo posts Found in this Cluster!')
+	print('\nChecking if this will refresh the db\n')
+	post_df = post_to_df()
+	print('\nRefreshing db...\n', post_to_df)
+	print('')
 
+	post_df_ = clean_post(post_df, 'content')
+	post_df_.content =post_df_.content.apply(tidy_up)
+	post_clean_list = post_df_.content.to_list()
 
-elem_cluster = np.bincount(labels)
-# print('\nElement Cluster\n', elem_cluster)
+	health, politics, security, economy = clean_setwords()
 
-for i in labels_unique:
-	label_elem[i]=0
+	h_points = sim_scores(health, post_df_.content.to_list())
+	p_points = sim_scores(politics, post_df_.content.to_list())
+	s_points = sim_scores(security, post_df_.content.to_list())
+	e_points = sim_scores(economy, post_df_.content.to_list())
 
-	for l in labels:
-		if l == i:
-			label_elem[i] +=1
-	# print('Label = ', i, ' Number of Elements = ', label_elem[i])
+	data = {'user_id': post_df.user_id.to_list(),
+		'names': post_df.name.to_list(),
+		'health_point':h_points,
+		'politics_point':p_points,
+		'security_point':s_points,
+		'economic_point':e_points}
 
-num_post = len(post_df.content)
-# print('\nNumber of Posts: ', num_post)
+	points_df = pd.DataFrame(data)
 
-samp_size = min(num_post, 10)
-
-# print('\nSample Size: ',samp_size)
-
-# silh_score = metrics.silhouette_score(k_data_df, labels, 
-# 									metric='euclidean', 
-# 									sample_size=samp_size)
-
-# print("\nSilhouette score = ", round(silh_score, 3), "  for Sample Size = ", samp_size)
+	h1_ = points_df.health_point.to_list()
+	h2_ = points_df.politics_point.to_list()
+	h3_ = points_df.security_point.to_list()
+	h4_ = points_df.economic_point.to_list()
 
 
-cluster_arry = np.asmatrix(k_data_df)
+	heal, poli, sec, eco = fetch_cate(h1_, h2_, h3_, h4_)
 
-# print('\ncluster array\n', cluster_arry)
+	k_data = {'health':heal,
+		'politics': poli,
+		'security': sec,
+		'economic': eco}
 
-# BIC = bic_cal(kmeans, cluster_arry)
+	k_data_df = pd.DataFrame(k_data).values
+	kmeans = kmeans.fit(k_data_df)
+	cluster_num = kmeans.predict(k_data_df)	
 
-# print('\nBayesian Information criterion score: ', BIC)
+	cn = cluster_num
+
+	cluster_post_df = set_clst_to_df(heal, poli, sec, eco, cn)
+	try:
+		heal_cluster_group = cluster_post_df.groupby('health')
+		get_heal_cluster = heal_cluster_group.get_group('h')
+		print('\n\t\t**************Health_cluster_group*******************\n', get_heal_cluster)
+	except KeyError:
+		print('\n\t\t**************Health_cluster_group*******************\n')
+		print('\nNo posts Found in this Cluster!')
+
+	try:	
+		poli_cluster_group = cluster_post_df.groupby('politics')
+		get_poli_cluster = poli_cluster_group.get_group('p')
+		print('\n\t\t**************Politics_cluster_group*******************\n', get_poli_cluster)
+	except KeyError:
+		print('\n\t\t**************Politics_cluster_group*******************\n')
+		print('\nNo posts Found in this Cluster!')
+
+	try:
+		sec_cluster_group = cluster_post_df.groupby('security')
+		get_sec_cluster = sec_cluster_group.get_group('s')
+		print('\n\t\t**************Security_cluster_group*******************\n', get_sec_cluster)
+	except KeyError:
+		print('\n\t\t**************Security_cluster_group*******************\n')
+		print('\nNo posts Found in this Cluster!')
+
+	try:
+		eco_cluster_group = cluster_post_df.groupby('economic')
+		get_eco_cluster = eco_cluster_group.get_group('ec')
+		print('\n\t\t**************Economy_cluster_group*******************\n', get_sec_cluster)
+	except KeyError:
+		get_eco_cluster = ''
+		print('\n\t\t**************Economy_cluster_group*******************\n')
+		print('\nNo posts Found in this Cluster!')
+
+	return get_heal_cluster, get_poli_cluster, get_sec_cluster, get_eco_cluster
+
+
+# elem_cluster = np.bincount(labels)
+# # print('\nElement Cluster\n', elem_cluster)
+
+# for i in labels_unique:
+# 	label_elem[i]=0
+
+# 	for l in labels:
+# 		if l == i:
+# 			label_elem[i] +=1
+# 	# print('Label = ', i, ' Number of Elements = ', label_elem[i])
+
+# num_post = len(post_df.content)
+# # print('\nNumber of Posts: ', num_post)
+
+# samp_size = min(num_post, 10)
+
+
+# cluster_arry = np.asmatrix(k_data_df)
