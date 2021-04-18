@@ -108,9 +108,9 @@ def jaccard_similarity(q, doc):
 	intersect = set(q).intersection(set(doc))
 	union = set(q).union(set(doc))
 
-	# print('\nlen(intersect)/len(union)', len(intersect)/len(union), '\n')
+	print('float(len(intersect))/len(union): \n', float(len(intersect))/len(union))
 
-	return len(intersect)/len(union)
+	return float(len(intersect))/len(union)
 
 
 #Implementing Similarity Score
@@ -120,7 +120,7 @@ def sim_scores(group, content):
 		s = jaccard_similarity(group, post)
 		points.append(s)
 
-	# print('\nFrom sim_scores', points)
+	print('\nFrom sim_scores', points)
 	return points
 
 
@@ -193,9 +193,6 @@ def set_clst_to_df(he, pol, se, ec, cn):
 	return clst_post_df
 
 
-# #Grouping Cluster by number
-# cluster_gp = cluster_post_df.groupby('User_name').sum()
-# print('\n\t\t**************Grouping Cluster By Number*******************\n', cluster_gp)
 
 def kmean_clst():
 	print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
@@ -205,7 +202,7 @@ def kmean_clst():
 	kmeans = KMeans(n_clusters=n_clst, 
 					init='k-means++', 
 					random_state=0, 
-					max_iter=100, 
+					max_iter=200, 
 					n_init=10,
 					verbose=True)
 
@@ -292,7 +289,6 @@ def kmean_clst():
 		get_eco_cluster = eco_cluster_group.get_group(3)
 		print('\n\t\t**************Economy_cluster_group*******************\n', get_eco_cluster)
 	except KeyError:
-		get_eco_cluster = ''
 		print('\n\t\t**************Economy_cluster_group*******************\n')
 		print('\nNo posts Found in this Cluster!')
 
