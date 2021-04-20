@@ -2,7 +2,7 @@ health_related_words = '''covid19 life death recover fever cough hospital diseas
 							virusallergy appetite aspirin bandage blood  bone broken bruise 
 							cast clinic drugs cold cut diarrhea dizzy first aid flu headach hives 
 							indegestion infection injury medication muscle nausea pain painful 
-							prescribe prescription rash shot sneeze sore'''
+							prescribe prescription rash shot sneeze sore isolation patient treatement'''
 
 
 politics_related_words = '''PDP APC party senator president local government asorock asovilla abuja
