@@ -82,45 +82,55 @@ def tidy_up(text):
 def clean_setwords():
 
 	health = tidy_up(sw.health_related_words)
+	# print('\nhealth Tidy_up\n', health)
 	politics = tidy_up(sw.politics_related_words)
 	security = tidy_up(sw.security_related_words)
 	economy = tidy_up(sw.economic_related_words)
 
 	#Dropping duplicates
 	words =  health.split()
-	health = " ".join(sorted(set(words), key=words.index))
+	# print('\nword for health\n', words)
+	health = " ".join(sorted(set(words), key=words.index)).split()
+	# print('\nsorted health word: ', health)
 
 	words = politics.split()
-	politics = " ".join(sorted(set(words), key=words.index))
+	politics = " ".join(sorted(set(words), key=words.index)).split()
 
 	words = security.split()
-	security = " ".join(sorted(set(words), key=words.index))
+	security = " ".join(sorted(set(words), key=words.index)).split()
 
 	words = economy.split()
-	economy = " ".join(sorted(set(words), key=words.index))
+	economy = " ".join(sorted(set(words), key=words.index)).split()
 
 	return health, politics, security, economy
 
 
-
 #Implementing Jaccard SImilarity
-def jaccard_similarity(q, doc):
-	intersect = set(q).intersection(set(doc))
-	union = set(q).union(set(doc))
+def jaccard_similarity(group_list, text_list):
+	group_set = set(group_list)
+	# print('\ngroup_set\n', group_set)
+	text_set = set(text_list)
+	# print('\ntext_set\n',text_set)
+	intersect = list(group_set.intersection(text_set))
+	intersection = len(intersect)
+	union = (len(group_list)+len(text_list)) - intersection
 
-	print('float(len(intersect))/len(union): \n', float(len(intersect))/len(union))
+	# print('\nlen(intersect) / union: \n', intersection / union)
 
-	return float(len(intersect))/len(union)
+	return intersection / union
 
 
 #Implementing Similarity Score
 def sim_scores(group, content):
+	# print('\ngroup from sim_score: \n', group, '\n')
+	# print('\ncontent from sim_score: \n', content, '\n')
 	points = []
 	for post in content:
-		s = jaccard_similarity(group, post)
+		post_list = post.split()
+		s = jaccard_similarity(group, post_list)
 		points.append(s)
 
-	print('\nFrom sim_scores', points)
+	print('\nFrom sim_scores for {} in {} is: {}'.format(post, group, points))
 	return points
 
 
@@ -145,7 +155,7 @@ def fetch_cate(h1, h2, h3, h4):
 			sec.append(1)
 		else:
 			sec.append(0)
-		if eco == d:
+		if m == d:
 			eco.append(1)
 		else:
 			eco.append(0)
@@ -185,13 +195,26 @@ def set_clst_to_df(he, pol, se, ec, cn):
 					'economic': eco_
 					}
 
+	cluster_post_data2 = {'user_id': post_df.user_id.to_list(),
+					'User_name': post_df["name"],
+					# 'Post': post_df["content"],
+					'Cluster_Num': cn,
+					'Cleaned_Post': post_clean_list,
+					'health':he,
+					'politics': pol,
+					'security': se,
+					'economic': ec
+					}
+
 	# print('\ncluster_post_data: \n', cluster_post_data)
 	#set to df
 	clst_post_df = pd.DataFrame(cluster_post_data)
 	print('\nCluster in DF\n',clst_post_df)
+	clst_post_df2 = pd.DataFrame(cluster_post_data2)
+	print('\nCluster in DF\n',clst_post_df2)
+
 
 	return clst_post_df
-
 
 
 def kmean_clst():
@@ -202,7 +225,7 @@ def kmean_clst():
 	kmeans = KMeans(n_clusters=n_clst, 
 					init='k-means++', 
 					random_state=0, 
-					max_iter=200, 
+					max_iter=100, 
 					n_init=10,
 					verbose=True)
 
@@ -217,12 +240,15 @@ def kmean_clst():
 
 	health, politics, security, economy = clean_setwords()
 
+
+
 	#Comparing Post contents using jaccard similarity and 
 	#Getting scores of all cluster points
 	h_points = sim_scores(health, post_df_.content.to_list())
 	p_points = sim_scores(politics, post_df_.content.to_list())
 	s_points = sim_scores(security, post_df_.content.to_list())
 	e_points = sim_scores(economy, post_df_.content.to_list())
+
 
 	data = {'user_id': post_df.user_id.to_list(),
 		'names': post_df.name.to_list(),
@@ -231,7 +257,9 @@ def kmean_clst():
 		'security_point':s_points,
 		'economic_point':e_points}
 
+
 	points_df = pd.DataFrame(data)
+
 
 	h1_ = points_df.health_point.to_list()
 	h2_ = points_df.politics_point.to_list()
@@ -247,49 +275,62 @@ def kmean_clst():
 		'security': sec,
 		'economic': eco}
 
+
+
 	k_data_df = pd.DataFrame(k_data).values
+
 
 	# Compute k-means clustering.
 	kmeans = kmeans.fit(k_data_df)
 
+
 	#Using the k-mean to predict the context of the post
 	# Predict the closest cluster each word in Post belongs to
-	cluster_num = kmeans.predict(k_data_df)	
+	cluster_num = kmeans.predict(k_data_df)
 
 	cn = cluster_num
+
 	print ('\ncluster number: ', cn)
 
+
+
 	cluster_post_df = set_clst_to_df(heal, poli, sec, eco, cn)
+
+
 	try:
-		heal_cluster_group = cluster_post_df.groupby('Cluster_Num')
-		get_heal_cluster = heal_cluster_group.get_group(0)
+		heal_cluster_group = cluster_post_df.groupby('health')
+		get_heal_cluster = heal_cluster_group.get_group('h')
 		print('\n\t\t**************Health_cluster_group*******************\n', get_heal_cluster)
 	except KeyError:
-		print('\n\t\t**************Health_cluster_group*******************\n')
-		print('\nNo posts Found in this Cluster!')
+		get_heal_cluster = ' '
+		# print('\n\t\t**************Health_cluster_group*******************\n')
+		# print('\nNo posts Found in this Cluster!')
 
 	try:	
-		poli_cluster_group = cluster_post_df.groupby('Cluster_Num')
-		get_poli_cluster = poli_cluster_group.get_group(1)
+		poli_cluster_group = cluster_post_df.groupby('politics')
+		get_poli_cluster = poli_cluster_group.get_group('p')
 		print('\n\t\t**************Politics_cluster_group*******************\n', get_poli_cluster)
 	except KeyError:
-		print('\n\t\t**************Politics_cluster_group*******************\n')
-		print('\nNo posts Found in this Cluster!')
+		get_poli_cluster = ' '
+		# print('\n\t\t**************Politics_cluster_group*******************\n')
+		# print('\nNo posts Found in this Cluster!')
 
 	try:
-		sec_cluster_group = cluster_post_df.groupby('Cluster_Num')
-		get_sec_cluster = sec_cluster_group.get_group(2)
+		sec_cluster_group = cluster_post_df.groupby('security')
+		get_sec_cluster = sec_cluster_group.get_group('s')
 		print('\n\t\t**************Security_cluster_group*******************\n', get_sec_cluster)
 	except KeyError:
-		print('\n\t\t**************Security_cluster_group*******************\n')
-		print('\nNo posts Found in this Cluster!')
+		get_sec_cluster = ' '
+		# print('\n\t\t**************Security_cluster_group*******************\n')
+		# print('\nNo posts Found in this Cluster!')
 
 	try:
-		eco_cluster_group = cluster_post_df.groupby('Cluster_Num')
-		get_eco_cluster = eco_cluster_group.get_group(3)
+		eco_cluster_group = cluster_post_df.groupby('economic')
+		get_eco_cluster = eco_cluster_group.get_group('ec')
 		print('\n\t\t**************Economy_cluster_group*******************\n', get_eco_cluster)
 	except KeyError:
+		get_eco_cluster = ' '
 		print('\n\t\t**************Economy_cluster_group*******************\n')
-		print('\nNo posts Found in this Cluster!')
+		# print('\nNo posts Found in this Cluster!')
 
 	return get_heal_cluster, get_poli_cluster, get_sec_cluster, get_eco_cluster
