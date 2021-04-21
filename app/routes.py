@@ -9,7 +9,7 @@ import pandas as pd
 from flask import Blueprint, redirect, render_template, flash, request, session, url_for
 from flask_login import login_required, current_user
 from app import db, app
-from app import class_cluster as cc
+from app.class_cluster import kmean_clst, post_to_df
 from app.forms import PostForm, FollowUnfollowForm
 from app.models import User, Post
 
@@ -42,8 +42,7 @@ def newsfeed():
         users = get_users()
 
         #call class_cluster module 
-        print('calling cluster everytime feeds is called')
-        gh, gp, gs, ge = cc.kmean_clst()
+        gh, gp, gs, ge = kmean_clst()
         # print('\nFrom newsfedd Func gh: \n', gh)
         # print('\nFrom newsfedd Func gp: \n', gp)
         # print('\nFrom newsfedd Func gs: \n', gs)
@@ -153,7 +152,7 @@ def unfollow(email):
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=email).first()
-        print('user: ', user)
+        # print('user: ', user)
         if user is None:
             flash('User {} not found!'.format(email))
             return redirect(url_for('index'))
@@ -173,26 +172,49 @@ def suggestUser(u_id, get_cluster):
     """
     This function will sugget user based on post made
     """
-    print("\nIn suggestion Function")
+    # print("\nIn suggestion Function")
     user_in_clust_list = []
 
     #check if users post is in health cluster
-    #get health cluster
+    # get cluster
     cluster = get_cluster
     #get user_id column and save to list
     col_id_list = cluster.user_id.to_list()
-    print('col_id_list: ', col_id_list)
+    # print('col_id_list: ', col_id_list)
     #Check if user_id is in list
     if u_id in col_id_list:
         all_user_id = pd.unique(col_id_list).tolist()
-        print('all_user_id, :', all_user_id)
+        # print('all_user_id, :', all_user_id)
         for i in all_user_id:
             if u_id != i:
                 users_in_cluster = User.query.filter_by(id=i).first()
-                print("users_in_cluster: ", users_in_cluster)
+                # print("users_in_cluster: ", users_in_cluster)
                 user_in_clust_list.append(users_in_cluster)
-        print('user_in_clust_list: ', user_in_clust_list)
+        # print('user_in_clust_list: ', user_in_clust_list)
         # print('users_in_cluster: ', users_in_cluster)
 
     return user_in_clust_list
 
+
+def cluster_table(get_clst, klas_):    
+    data = {'user_id': get_clst.user_id.to_list(),
+            'User': get_clst.User_name.to_list(),
+            'Post': get_clst.Post2.to_list(),
+            }
+
+    table_df = pd.DataFrame(data)
+    print('\nFrom cluster table func: \n', table_df)
+
+    tdf_html = table_df.to_html(classes=klas_)
+
+    return tdf_html
+
+
+@app.route('/health_cluster', methods=['GET', 'POST'])
+def health_table():
+    heal_clst, poli_clst, sec_clst, eco_clst = kmean_clst()
+
+    clst_tbl = cluster_table(heal_clst, 'health')
+    tables_clst = [clst_tbl]
+
+    return render_template('health_cluster.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
