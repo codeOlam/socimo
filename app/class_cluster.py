@@ -53,13 +53,11 @@ def clean_post(df, text):
 	"""
 	#Convert all case to lower case.
 	df[text] = df[text].str.lower()
-	# print('post_df.lower()\n', df[text])
 	
 	#Remove all unnecessary characters
 	df[text] = df[text].apply(lambda elem: re.sub(r"(@[A-Za-z0–9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?",
 			"",
 			elem))
-	# print('df[text]\n', df[text])
 
 	return df
 
@@ -82,16 +80,13 @@ def tidy_up(text):
 def clean_setwords():
 
 	health = tidy_up(sw.health_related_words)
-	# print('\nhealth Tidy_up\n', health)
 	politics = tidy_up(sw.politics_related_words)
 	security = tidy_up(sw.security_related_words)
 	economy = tidy_up(sw.economic_related_words)
 
 	#Dropping duplicates
 	words =  health.split()
-	# print('\nword for health\n', words)
 	health = " ".join(sorted(set(words), key=words.index)).split()
-	# print('\nsorted health word: ', health)
 
 	words = politics.split()
 	politics = " ".join(sorted(set(words), key=words.index)).split()
@@ -122,8 +117,6 @@ def jaccard_similarity(group_list, text_list):
 
 #Implementing Similarity Score
 def sim_scores(group, content):
-	# print('\ngroup from sim_score: \n', group, '\n')
-	# print('\ncontent from sim_score: \n', content, '\n')
 	points = []
 	for post in content:
 		post_list = post.split()
@@ -164,54 +157,36 @@ def fetch_cate(h1, h2, h3, h4):
 
 
 def set_clst_to_df(he, pol, se, ec, cn):
-	post_df = post_to_df()
-	post_df_ = clean_post(post_df, 'content')
-	post_df_.content =post_df_.content.apply(tidy_up)
-	post_clean_list = post_df_.content.to_list()
+	# post_df = post_to_df()
+	post_df2 = post_to_df()
+	post_df2_ = clean_post(post_df2, 'content')
+	# post_df_ = clean_post(post_df, 'content')
+	# post_df_.content =post_df_.content.apply(tidy_up)
+	# post_clean_list = post_df_.content.to_list()
 
 	heal_ = ['h' if h >=1 else h for h in he]
 	poli_ = ['p' if p >=1 else p for p in pol]
 	sec_ = ['s' if s >=1 else s for s in se]
 	eco_ = ['ec' if ec >=1 else ec for ec in ec]
 
-	print('heal_: ', len(heal_))
-	print('poli_: ', len(poli_))
-	print('sec_: ', len(sec_))
-	print('eco_: ', len(eco_))
-	print('user_id: ', len(post_df.user_id.to_list()))
-	print('User_name: ', len(post_df["name"]))
-	print('Cluster_Num: ', len(cn))
-	print('post_clean_list: ', ' : ', len(post_clean_list))
 
-
-	cluster_post_data = {'user_id': post_df.user_id.to_list(),
-					'User_name': post_df["name"],
-					# 'Post': post_df["content"],
+	cluster_post_data = {'user_id': post_df2.user_id.to_list(),
+					'User_name': post_df2["name"],
 					'Cluster_Num': cn,
-					'Cleaned_Post': post_clean_list,
+					# 'Cleaned_Post': post_clean_list,
+					'Post2': post_df2_.content.to_list(),
 					'health':heal_,
 					'politics': poli_,
 					'security': sec_,
 					'economic': eco_
 					}
 
-	cluster_post_data2 = {'user_id': post_df.user_id.to_list(),
-					'User_name': post_df["name"],
-					# 'Post': post_df["content"],
-					'Cluster_Num': cn,
-					'Cleaned_Post': post_clean_list,
-					'health':he,
-					'politics': pol,
-					'security': se,
-					'economic': ec
-					}
 
 	# print('\ncluster_post_data: \n', cluster_post_data)
 	#set to df
 	clst_post_df = pd.DataFrame(cluster_post_data)
 	print('\nCluster in DF\n',clst_post_df)
-	clst_post_df2 = pd.DataFrame(cluster_post_data2)
-	print('\nCluster in DF\n',clst_post_df2)
+
 
 
 	return clst_post_df
@@ -225,7 +200,7 @@ def kmean_clst():
 	kmeans = KMeans(n_clusters=n_clst, 
 					init='k-means++', 
 					random_state=0, 
-					max_iter=100, 
+					max_iter=10, 
 					n_init=10,
 					verbose=True)
 
