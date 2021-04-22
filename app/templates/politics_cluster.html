@@ -1,59 +1,13 @@
 {% extends 'master.html' %}
 
 {% block content %}
+{% include 'models/bootstrap_cdn.html' %}
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/table.css') }}">
 <div class="theme-layout">
-	<header class="widget">
-		<div class="topbar stick">
-			<div class="logo"><img src="static/images/logo.png" alt=""><span>Socimo</span></div>
-			<ul class="web-elements">
-				<li>
-					<div class="user-dp">
-						<a href="profile-page2.html" title="">
-							<img alt="" src="static/images/resources/user.jpg">
-							<div class="name">
-								<h4>{{ session['user'] }}</h4>
-							</div>
-						</a>
-					</div>
-				</li>
-				<li>
-					<a class="create" href="#" title="Add New" data-toggle="tooltip">
-						<i>
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-plus">
-								<line x1="12" y1="5" x2="12" y2="19"></line>
-								<line x1="5" y1="12" x2="19" y2="12"></line>
-							</svg></i>
-					</a>
-				</li>
-				<li>
-					<a href="#" title="">
-						<i>
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="feather feather-grid">
-								<rect x="3" y="3" width="7" height="7"></rect>
-								<rect x="14" y="3" width="7" height="7"></rect>
-								<rect x="14" y="14" width="7" height="7"></rect>
-								<rect x="3" y="14" width="7" height="7"></rect>
-							</svg>
-						</i>
-					</a>
-					<ul class="dropdown">
-						<li class="logout"><a href="/logout" title=""><i class="icofont-power"></i> Logout</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-
-	</header><!-- header -->
 	<nav aria-label="breadcrumb">
 	  <ol class="breadcrumb">
 	    <li class="breadcrumb-item"><a href="/">NewsFeed</a></li>
-	    <li class="breadcrumb-item active" aria-current="/politics_cluster">Politics Cluster</li>
+	    <li class="breadcrumb-item active" aria-current="/news_feed/politics_cluster">Politics Cluster</li>
 	  </ol>
 	</nav>
 	<section>
