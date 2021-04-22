@@ -218,7 +218,7 @@ def health_table():
     clst_tbl = cluster_table(heal_clst, 'health')
     tables_clst = [clst_tbl]
 
-    return render_template('health_cluster.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
+    return render_template('health_cluster2.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
 
 
 @app.route('/news_feed/politics_cluster', methods=['GET'])
