@@ -1,27 +1,21 @@
-{% extends 'master.html' %}
-
-{% block content %}
 {% include 'models/bootstrap_cdn.html' %}
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/table.css') }}">
 <div class="theme-layout">
-	<nav aria-label="breadcrumb">
-	  <ol class="breadcrumb">
-	    <li class="breadcrumb-item"><a href="/">NewsFeed</a></li>
-	    <li class="breadcrumb-item active" aria-current="/news_feed/politics_cluster">Politics Cluster</li>
-	  </ol>
-	</nav>
-	<section>
-		<div class="gap">
-			<div class="container">
-				<div class="row d-flex align-items-center justify-content-center">
-						<h1>Posts in Politics Cluster</h1>
-							{% for table in tables %}
-								{{table|safe}}
-							{% endfor %}								
-				</div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">NewsFeed</a></li>
+    <li class="breadcrumb-item active" aria-current="/news_feed/politics_cluster">Politics Cluster</li>
+  </ol>
+</nav>
+<section>
+	<div class="gap">
+		<div class="container">
+			<div class="row d-flex align-items-center justify-content-center">
+					<h1>Posts in Politics Cluster</h1>
+						{% for table in tables %}
+							{{table|safe}}
+						{% endfor %}								
 			</div>
 		</div>
-	</section>
-</div>
-
-{% endblock %}
+	</div>
+</section>

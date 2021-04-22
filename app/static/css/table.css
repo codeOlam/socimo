@@ -29,12 +29,12 @@ table.dataframe, .dataframe th, .dataframe td {
 }
 
 .health th {
-    background-color: #add8e6;
+    background-color: #2B547E;
     color: white;
 }
 
 .politics th {
-    background-color: #00FFFF;
+    background-color: #3B9C9C;
     color: white;
 }
 
@@ -44,7 +44,7 @@ table.dataframe, .dataframe th, .dataframe td {
 }
 
 .economy th {
-  background-color: #3B9C9C;
+  background-color: #990012;
   color: white;
 }
 
