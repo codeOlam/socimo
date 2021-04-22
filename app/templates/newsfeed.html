@@ -201,8 +201,7 @@
 
 									{% if users_in_poli_cluster %}
 									<div class="widget stick-widget">
-										<h4 class="widget-title">Follow
-													People Posting on Politics</h4>
+										<h4 class="widget-title"><a href="/politics_cluster">Follow People Posting on Politics</a> </h4>
 										<ul class="followers">
 											{% for user in users_in_poli_cluster %}
 											<li>
@@ -237,8 +236,7 @@
 
 									{% if  user_in_sec_cluster %}
 									<div class="widget stick-widget">
-										<h4 class="widget-title">Follow
-													People Posting Security Issues</h4>
+										<h4 class="widget-title"><a href="/security_cluster">Follow People Posting Security Issues</a> </h4>
 										<ul class="followers">
 											{% for user in user_in_sec_cluster %}
 											<li>
@@ -272,10 +270,11 @@
 
 									{% if  user_in_eco_cluster %}
 									<div class="widget stick-widget">
-										<h4 class="widget-title">Follow
-													People Posting Health Topic</h4>
+										<h4 class="widget-title"><a href="/economic_cluster">
+											Follow People Talking About Economy
+										</a> </h4>
 										<ul class="followers">
-											{% for user in clusterd_user %}
+											{% for user in user_in_eco_cluster %}
 											<li>
 												<figure><img alt="" src="static/images/resources/friend-avatar.jpg">
 												</figure>

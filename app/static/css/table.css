@@ -34,17 +34,27 @@ table.dataframe, .dataframe th, .dataframe td {
 }
 
 .politics th {
-    background-color: #77dd77;
+    background-color: #00FFFF;
     color: white;
 }
 
+.security th {
+  background-color: #008080;
+  color: white;
+}
+
+.economy th {
+  background-color: #98FF98;
+  color: white;
+}
+
 tr:nth-child(odd)		{ 
-  background-color:#eee; 
+  background-color: #eee; 
 }
 tr:nth-child(even)	{ 
-  background-color:#fff; 
+  background-color: #fff; 
 }
 
 tr:hover { 
-  background-color: #ffff99;
+  background-color: #82CAFA;
 }
