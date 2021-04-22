@@ -89,7 +89,8 @@ def newsfeed():
                             users=users,
                             clusterd_user=users_in_heal_cluster,
                             users_in_poli_cluster=users_in_poli_cluster,
-                            user_in_sec_cluster=user_in_sec_cluster
+                            user_in_sec_cluster=user_in_sec_cluster,
+                            user_in_eco_cluster=user_in_eco_cluster
                             )
     else:
         return redirect(url_for('login'))
@@ -210,7 +211,7 @@ def cluster_table(get_clst, klas_):
     return tdf_html
 
 
-@app.route('/health_cluster', methods=['GET', 'POST'])
+@app.route('/news_feed/health_cluster', methods=['GET'])
 def health_table():
     heal_clst, poli_clst, sec_clst, eco_clst = kmean_clst()
 
@@ -218,3 +219,33 @@ def health_table():
     tables_clst = [clst_tbl]
 
     return render_template('health_cluster.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
+
+
+@app.route('/news_feed/politics_cluster', methods=['GET'])
+def politics_table():
+    heal_clst, poli_clst, sec_clst, eco_clst = kmean_clst()
+
+    clst_tbl = cluster_table(poli_clst, 'politics')
+    tables_clst = [clst_tbl]
+
+    return render_template('politics_cluster.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
+
+
+@app.route('/news_feed/security_cluster', methods=['GET'])
+def security_table():
+    heal_clst, poli_clst, sec_clst, eco_clst = kmean_clst()
+
+    clst_tbl = cluster_table(sec_clst, 'security')
+    tables_clst = [clst_tbl]
+
+    return render_template('security_cluster.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
+
+
+@app.route('/news_feed/economic_cluster', methods=['GET'])
+def economic_table():
+    heal_clst, poli_clst, sec_clst, eco_clst = kmean_clst()
+
+    clst_tbl = cluster_table(eco_clst, 'economy')
+    tables_clst = [clst_tbl]
+
+    return render_template('economic_cluster.html', tables=tables_clst, titles=['user_id', 'User', 'Post'])
