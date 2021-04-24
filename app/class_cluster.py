@@ -77,40 +77,37 @@ def tidy_up(text):
 
 
 #Cleaning up setwords
-def clean_setwords():
-
-	health = tidy_up(sw.health_related_words)
-	politics = tidy_up(sw.politics_related_words)
-	security = tidy_up(sw.security_related_words)
-	economy = tidy_up(sw.economic_related_words)
-
+def clean_setwords(wordset1, wordset2, wordset3, wordset4):
 	#Dropping duplicates
-	words =  health.split()
-	health = " ".join(sorted(set(words), key=words.index)).split()
 
-	words = politics.split()
-	politics = " ".join(sorted(set(words), key=words.index)).split()
+	words =  wordset1.split()
+	wordset1 = " ".join(sorted(set(words), key=words.index)).split()
 
-	words = security.split()
-	security = " ".join(sorted(set(words), key=words.index)).split()
+	words = wordset2.split()
+	wordset2 = " ".join(sorted(set(words), key=words.index)).split()
 
-	words = economy.split()
-	economy = " ".join(sorted(set(words), key=words.index)).split()
+	words = wordset3.split()
+	wordset3 = " ".join(sorted(set(words), key=words.index)).split()
 
-	return health, politics, security, economy
+	words = wordset4.split()
+	wordset4 = " ".join(sorted(set(words), key=words.index)).split()
+
+	return wordset1, wordset2, wordset3, wordset4
 
 
 #Implementing Jaccard SImilarity
 def jaccard_similarity(group_list, text_list):
 	group_set = set(group_list)
-	# print('\ngroup_set\n', group_set)
+	print('\ngroup_set\n', group_set)
 	text_set = set(text_list)
-	# print('\ntext_set\n',text_set)
+	print('\ntext_set\n',text_set)
 	intersect = list(group_set.intersection(text_set))
+	print('intersect: ', intersect)
 	intersection = len(intersect)
+	print('intersection: ', intersection)
 	union = (len(group_list)+len(text_list)) - intersection
 
-	# print('\nlen(intersect) / union: \n', intersection / union)
+	print('\nlen(intersect) / union: \n', intersection / union)
 
 	return intersection / union
 
@@ -122,41 +119,67 @@ def sim_scores(group, content):
 		post_list = post.split()
 		s = jaccard_similarity(group, post_list)
 		points.append(s)
-
-	print('\nFrom sim_scores for {} in {} is: {}'.format(post, group, points))
+		# print('\nFrom sim_scores for {} in {} is: {}'.format(post, group, s))
+	print ('points: ', points)
 	return points
 
 
 #Assigining Categories based on Highest point
 def fetch_cate(h1, h2, h3, h4):
-	heal = []
-	poli = []
-	sec = []
-	eco = []
+	x_list = []
+	print('h1: ', h1)
+	# for x in h1:
+	# 	if x >= 0.01:
+	# 		x_list.append(1)
+	# 	else:
+	# 		x_list.append(0)
+		# if x_max == x:
+		# 	x_list.append(1)
+		# else:
+		# 	x_list.append(0)
+	# x_list = [1 if x >= 0.01 else 0 for x in h1]
+	# print('x_list: ', x_list)
+	print('h2: ', h2)
+	print('h3: ', h3)
+	print('h4: ', h4)
+	heal = [1 if x >= 0.01 else 0 for x in h1]
+	print('\nheal: ', heal)
+	poli = [1 if x >= 0.01 else 0 for x in h2]
+	print('\npoli: ', poli)
+	sec = [1 if x >= 0.01 else 0 for x in h3]
+	print('\nsec: ', sec)
+	eco = [1 if x >= 0.01 else 0 for x in h4]
+	print('\neco: ', eco)
 
-	for a, b, c, d in zip(h1, h2, h3, h4):
-		m = max(a, b, c, d)
-		if m == a:
-			heal.append(1)
-		else:
-			heal.append(0)
-		if m == b:
-			poli.append(1)
-		else:
-			poli.append(0)
-		if m == c:
-			sec.append(1)
-		else:
-			sec.append(0)
-		if m == d:
-			eco.append(1)
-		else:
-			eco.append(0)
+	# for a in h1:
+	# 	if a >= 0.01:
+	# 		heal.append(1)
+	# 	else:
+	# 		heal.append(0)
+
+	# for a, b, c, d in zip(h1, h2, h3, h4):
+	# 	m = max(a, b, c, d)
+	# 	if m == a:
+	# 		heal.append(1)
+	# 	else:
+	# 		heal.append(0)
+	# 	if m == b:
+	# 		poli.append(1)
+	# 	else:
+	# 		poli.append(0)
+	# 	if m == c:
+	# 		sec.append(1)
+	# 	else:
+	# 		sec.append(0)
+	# 	if m == d:
+	# 		eco.append(1)
+	# 	else:
+	# 		eco.append(0)
 
 	return heal, poli, sec, eco
 
 
-def set_clst_to_df(he, pol, se, ec, cn):
+def set_clst_to_df(he, pol, se, eco, cn):
 	# post_df = post_to_df()
 	post_df2 = post_to_df()
 	post_df2_ = clean_post(post_df2, 'content')
@@ -164,10 +187,18 @@ def set_clst_to_df(he, pol, se, ec, cn):
 	# post_df_.content =post_df_.content.apply(tidy_up)
 	# post_clean_list = post_df_.content.to_list()
 
-	heal_ = ['h' if h >=1 else h for h in he]
-	poli_ = ['p' if p >=1 else p for p in pol]
-	sec_ = ['s' if s >=1 else s for s in se]
-	eco_ = ['ec' if ec >=1 else ec for ec in ec]
+	print('he: ', he)
+	heal_ = ['h' if h ==1 else 0 for h in he]
+	print('heal_: ', heal_)
+	print('\npol: ', pol)
+	poli_ = ['p' if p ==1 else 0 for p in pol]
+	print('poli_: ', poli_)
+	print('\nse: ', se)
+	sec_ = ['s' if s ==1 else 0 for s in se]
+	print('sec_: ', sec_)
+	print('\neco: ', eco)
+	eco_ = ['ec' if ec ==1 else 0 for ec in eco]
+	print('\neco_: ', eco_)
 
 
 	cluster_post_data = {'user_id': post_df2.user_id.to_list(),
@@ -195,34 +226,37 @@ def set_clst_to_df(he, pol, se, ec, cn):
 def kmean_clst():
 	print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
 
-	n_clst = 4
+	n_clst = 3
 
 	kmeans = KMeans(n_clusters=n_clst, 
 					init='k-means++', 
 					random_state=0, 
-					max_iter=10, 
+					max_iter=4, 
 					n_init=10,
 					verbose=True)
 
-	print('\nChecking if this will refresh the db\n')
 	post_df = post_to_df()
-	print('\nRefreshing db...\n', post_to_df)
-	print('')
-
 	post_df_ = clean_post(post_df, 'content')
 	post_df_.content =post_df_.content.apply(tidy_up)
 	post_clean_list = post_df_.content.to_list()
 
-	health, politics, security, economy = clean_setwords()
+	#Tidy wordset
+	health = tidy_up(sw.health_related_words)
+	politics = tidy_up(sw.politics_related_words)
+	security = tidy_up(sw.security_related_words)
+	economy = tidy_up(sw.economic_related_words)
+
+	#clean wordset
+	health, politics, security, economy = clean_setwords(health, politics, security, economy)
 
 
 
 	#Comparing Post contents using jaccard similarity and 
 	#Getting scores of all cluster points
-	h_points = sim_scores(health, post_df_.content.to_list())
-	p_points = sim_scores(politics, post_df_.content.to_list())
-	s_points = sim_scores(security, post_df_.content.to_list())
-	e_points = sim_scores(economy, post_df_.content.to_list())
+	h_points = sim_scores(health, post_clean_list)
+	p_points = sim_scores(politics, post_clean_list)
+	s_points = sim_scores(security, post_clean_list)
+	e_points = sim_scores(economy, post_clean_list)
 
 
 	data = {'user_id': post_df.user_id.to_list(),
