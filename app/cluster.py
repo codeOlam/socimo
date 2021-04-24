@@ -13,7 +13,7 @@ from scipy.spatial import distance
 
 from app import db
 from app.models import Post, User
-import app.setwords as sw
+import app.wordset as sw
 
 
 nlp = en_core_web_sm.load()
@@ -126,14 +126,17 @@ def sim_scores(group, content):
 
 #Assigining Categories based on Highest point
 def fetch_cate(h1, h2, h3, h4):
-
-	heal = [1 if x >= 0.01 else 0 for x in h1]
+	print('\nh1: ', h1)
+	print('\nh2: ', h2)
+	print('\nh3: ', h3)
+	print('\nh4: ', h4)
+	heal = [1 if x >= 0.0001 else 0 for x in h1]
 	print('\nheal: ', heal)
-	poli = [1 if x >= 0.01 else 0 for x in h2]
+	poli = [1 if x >= 0.0001 else 0 for x in h2]
 	print('\npoli: ', poli)
-	sec = [1 if x >= 0.01 else 0 for x in h3]
+	sec = [1 if x >= 0.0001 else 0 for x in h3]
 	print('\nsec: ', sec)
-	eco = [1 if x >= 0.01 else 0 for x in h4]
+	eco = [1 if x >= 0.0001 else 0 for x in h4]
 	print('\neco: ', eco)
 
 	return heal, poli, sec, eco
@@ -186,7 +189,7 @@ def set_clst_to_df(he, pol, se, eco, cn):
 def kmean_clst():
 	print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
 
-	n_clst = 3
+	n_clst = 4
 
 	kmeans = KMeans(n_clusters=n_clst, 
 					init='k-means++', 

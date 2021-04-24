@@ -43,10 +43,6 @@ def newsfeed():
 
         #call class_cluster module 
         gh, gp, gs, ge = kmean_clst()
-        # print('\nFrom newsfedd Func gh: \n', gh)
-        # print('\nFrom newsfedd Func gp: \n', gp)
-        # print('\nFrom newsfedd Func gs: \n', gs)
-        # print('\nFrom newsfedd Func ge: \n', ge)
 
         try:
             users_in_heal_cluster = suggestUser(u_id, gh)
@@ -181,18 +177,13 @@ def suggestUser(u_id, get_cluster):
     cluster = get_cluster
     #get user_id column and save to list
     col_id_list = cluster.user_id.to_list()
-    # print('col_id_list: ', col_id_list)
     #Check if user_id is in list
     if u_id in col_id_list:
         all_user_id = pd.unique(col_id_list).tolist()
-        # print('all_user_id, :', all_user_id)
         for i in all_user_id:
             if u_id != i:
                 users_in_cluster = User.query.filter_by(id=i).first()
-                # print("users_in_cluster: ", users_in_cluster)
                 user_in_clust_list.append(users_in_cluster)
-        # print('user_in_clust_list: ', user_in_clust_list)
-        # print('users_in_cluster: ', users_in_cluster)
 
     return user_in_clust_list
 
