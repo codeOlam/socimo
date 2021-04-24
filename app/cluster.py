@@ -34,11 +34,9 @@ def post_to_df():
 	#Defining the query
 	# post_query = db.session.query(Post).with_entities(Post.user_id, Post.content)
 	post_query = qs = db.session.query(User.id, User.name, Post.content).join(User)
-	# print('Post Query\n',post_query)
 
 	#getting all post entries
 	post_qs = post_query.all()
-	# print('Post Query Set\n',post_qs)
 
 	posts_to_df = pd.DataFrame([(d.id, d.name, d.content) for d in post_qs], columns=['user_id', 'name', 'content'])
 	print('Post DataFrame\n', posts_to_df)
@@ -98,16 +96,11 @@ def clean_setwords(wordset1, wordset2, wordset3, wordset4):
 #Implementing Jaccard SImilarity
 def jaccard_similarity(group_list, text_list):
 	group_set = set(group_list)
-	print('\ngroup_set\n', group_set)
 	text_set = set(text_list)
-	print('\ntext_set\n',text_set)
 	intersect = list(group_set.intersection(text_set))
-	print('intersect: ', intersect)
 	intersection = len(intersect)
-	print('intersection: ', intersection)
 	union = (len(group_list)+len(text_list)) - intersection
 
-	print('\nlen(intersect) / union: \n', intersection / union)
 
 	return intersection / union
 
@@ -119,56 +112,34 @@ def sim_scores(group, content):
 		post_list = post.split()
 		s = jaccard_similarity(group, post_list)
 		points.append(s)
-		# print('\nFrom sim_scores for {} in {} is: {}'.format(post, group, s))
-	print ('points: ', points)
 	return points
 
 
 #Assigining Categories based on Highest point
 def fetch_cate(h1, h2, h3, h4):
-	print('\nh1: ', h1)
-	print('\nh2: ', h2)
-	print('\nh3: ', h3)
-	print('\nh4: ', h4)
 	heal = [1 if x >= 0.0001 else 0 for x in h1]
-	print('\nheal: ', heal)
 	poli = [1 if x >= 0.0001 else 0 for x in h2]
-	print('\npoli: ', poli)
 	sec = [1 if x >= 0.0001 else 0 for x in h3]
-	print('\nsec: ', sec)
 	eco = [1 if x >= 0.0001 else 0 for x in h4]
-	print('\neco: ', eco)
 
 	return heal, poli, sec, eco
 
 
 def set_clst_to_df(he, pol, se, eco, cn):
-	# post_df = post_to_df()
-	post_df2 = post_to_df()
-	post_df2_ = clean_post(post_df2, 'content')
-	# post_df_ = clean_post(post_df, 'content')
-	# post_df_.content =post_df_.content.apply(tidy_up)
-	# post_clean_list = post_df_.content.to_list()
+	post_df = post_to_df()
+	post_df_ = clean_post(post_df, 'content')
 
-	print('he: ', he)
+
 	heal_ = ['h' if h ==1 else 0 for h in he]
-	print('heal_: ', heal_)
-	print('\npol: ', pol)
 	poli_ = ['p' if p ==1 else 0 for p in pol]
-	print('poli_: ', poli_)
-	print('\nse: ', se)
 	sec_ = ['s' if s ==1 else 0 for s in se]
-	print('sec_: ', sec_)
-	print('\neco: ', eco)
 	eco_ = ['ec' if ec ==1 else 0 for ec in eco]
-	print('\neco_: ', eco_)
 
 
-	cluster_post_data = {'user_id': post_df2.user_id.to_list(),
-					'User_name': post_df2["name"],
+	cluster_post_data = {'user_id': post_df.user_id.to_list(),
+					'User_name': post_df["name"],
 					'Cluster_Num': cn,
-					# 'Cleaned_Post': post_clean_list,
-					'Post2': post_df2_.content.to_list(),
+					'Post2': post_df_.content.to_list(),
 					'health':heal_,
 					'politics': poli_,
 					'security': sec_,
@@ -176,10 +147,9 @@ def set_clst_to_df(he, pol, se, eco, cn):
 					}
 
 
-	# print('\ncluster_post_data: \n', cluster_post_data)
 	#set to df
 	clst_post_df = pd.DataFrame(cluster_post_data)
-	print('\nCluster in DF\n',clst_post_df)
+	# print('\nCluster in DF\n',clst_post_df)
 
 
 
@@ -261,10 +231,6 @@ def kmean_clst():
 	cluster_num = kmeans.predict(k_data_df)
 
 	cn = cluster_num
-
-	print ('\ncluster number: ', cn)
-
-
 
 	cluster_post_df = set_clst_to_df(heal, poli, sec, eco, cn)
 
