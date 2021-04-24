@@ -9,7 +9,7 @@ import pandas as pd
 from flask import Blueprint, redirect, render_template, flash, request, session, url_for
 from flask_login import login_required, current_user
 from app import db, app
-from app.class_cluster import kmean_clst, post_to_df
+from app.cluster import kmean_clst, post_to_df
 from app.forms import PostForm, FollowUnfollowForm
 from app.models import User, Post
 

@@ -126,22 +126,7 @@ def sim_scores(group, content):
 
 #Assigining Categories based on Highest point
 def fetch_cate(h1, h2, h3, h4):
-	x_list = []
-	print('h1: ', h1)
-	# for x in h1:
-	# 	if x >= 0.01:
-	# 		x_list.append(1)
-	# 	else:
-	# 		x_list.append(0)
-		# if x_max == x:
-		# 	x_list.append(1)
-		# else:
-		# 	x_list.append(0)
-	# x_list = [1 if x >= 0.01 else 0 for x in h1]
-	# print('x_list: ', x_list)
-	print('h2: ', h2)
-	print('h3: ', h3)
-	print('h4: ', h4)
+
 	heal = [1 if x >= 0.01 else 0 for x in h1]
 	print('\nheal: ', heal)
 	poli = [1 if x >= 0.01 else 0 for x in h2]
@@ -150,31 +135,6 @@ def fetch_cate(h1, h2, h3, h4):
 	print('\nsec: ', sec)
 	eco = [1 if x >= 0.01 else 0 for x in h4]
 	print('\neco: ', eco)
-
-	# for a in h1:
-	# 	if a >= 0.01:
-	# 		heal.append(1)
-	# 	else:
-	# 		heal.append(0)
-
-	# for a, b, c, d in zip(h1, h2, h3, h4):
-	# 	m = max(a, b, c, d)
-	# 	if m == a:
-	# 		heal.append(1)
-	# 	else:
-	# 		heal.append(0)
-	# 	if m == b:
-	# 		poli.append(1)
-	# 	else:
-	# 		poli.append(0)
-	# 	if m == c:
-	# 		sec.append(1)
-	# 	else:
-	# 		sec.append(0)
-	# 	if m == d:
-	# 		eco.append(1)
-	# 	else:
-	# 		eco.append(0)
 
 	return heal, poli, sec, eco
 
