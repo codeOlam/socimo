@@ -149,7 +149,7 @@ def set_clst_to_df(he, pol, se, eco, cn):
 
 	#set to df
 	clst_post_df = pd.DataFrame(cluster_post_data)
-	# print('\nCluster in DF\n',clst_post_df)
+	print('\nCluster in DF\n',clst_post_df)
 
 
 
@@ -159,7 +159,16 @@ def set_clst_to_df(he, pol, se, eco, cn):
 def kmean_clst():
 	print('\n\t\t***************K-MEAN Algorithm Implementation*******************')
 
-	n_clst = 4
+
+	post_df = post_to_df()
+	post_df_ = clean_post(post_df, 'content')
+	post_df_.content =post_df_.content.apply(tidy_up)
+	post_clean_list = post_df_.content.to_list()
+
+	if len(post_clean_list) >= 5:
+		n_clst = 4
+	else:
+		n_clst = len(post_clean_list)
 
 	kmeans = KMeans(n_clusters=n_clst, 
 					init='k-means++', 
@@ -167,11 +176,6 @@ def kmean_clst():
 					max_iter=4, 
 					n_init=10,
 					verbose=True)
-
-	post_df = post_to_df()
-	post_df_ = clean_post(post_df, 'content')
-	post_df_.content =post_df_.content.apply(tidy_up)
-	post_clean_list = post_df_.content.to_list()
 
 	#Tidy wordset
 	health = tidy_up(sw.health_related_words)
@@ -238,37 +242,30 @@ def kmean_clst():
 	try:
 		heal_cluster_group = cluster_post_df.groupby('health')
 		get_heal_cluster = heal_cluster_group.get_group('h')
-		print('\n\t\t**************Health_cluster_group*******************\n', get_heal_cluster)
+		# print('\n\t\t**************Health_cluster_group*******************\n', get_heal_cluster)
 	except KeyError:
-		get_heal_cluster = ' '
-		# print('\n\t\t**************Health_cluster_group*******************\n')
-		# print('\nNo posts Found in this Cluster!')
+		get_heal_cluster = None
 
 	try:	
 		poli_cluster_group = cluster_post_df.groupby('politics')
 		get_poli_cluster = poli_cluster_group.get_group('p')
-		print('\n\t\t**************Politics_cluster_group*******************\n', get_poli_cluster)
+		# print('\n\t\t**************Politics_cluster_group*******************\n', get_poli_cluster)
 	except KeyError:
-		get_poli_cluster = ' '
-		# print('\n\t\t**************Politics_cluster_group*******************\n')
-		# print('\nNo posts Found in this Cluster!')
+		get_poli_cluster = None
 
 	try:
 		sec_cluster_group = cluster_post_df.groupby('security')
 		get_sec_cluster = sec_cluster_group.get_group('s')
-		print('\n\t\t**************Security_cluster_group*******************\n', get_sec_cluster)
+		# print('\n\t\t**************Security_cluster_group*******************\n', get_sec_cluster)
 	except KeyError:
-		get_sec_cluster = ' '
-		# print('\n\t\t**************Security_cluster_group*******************\n')
-		# print('\nNo posts Found in this Cluster!')
+		get_sec_cluster = None
 
 	try:
 		eco_cluster_group = cluster_post_df.groupby('economic')
 		get_eco_cluster = eco_cluster_group.get_group('ec')
-		print('\n\t\t**************Economy_cluster_group*******************\n', get_eco_cluster)
+		# print('\n\t\t**************Economy_cluster_group*******************\n', get_eco_cluster)
 	except KeyError:
-		get_eco_cluster = ' '
-		print('\n\t\t**************Economy_cluster_group*******************\n')
-		# print('\nNo posts Found in this Cluster!')
+		get_eco_cluster = None
+
 
 	return get_heal_cluster, get_poli_cluster, get_sec_cluster, get_eco_cluster

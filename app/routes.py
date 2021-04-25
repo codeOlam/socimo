@@ -44,28 +44,11 @@ def newsfeed():
         #call class_cluster module 
         gh, gp, gs, ge = kmean_clst()
 
-        try:
-            users_in_heal_cluster = suggestUser(u_id, gh)
-        except AttributeError as e:
-            users_in_heal_cluster = ''
-            print ('User not in any cluster yet!\n', e)
 
-        try:
-            users_in_poli_cluster = suggestUser(u_id, gp)
-        except AttributeError as e:
-            users_in_poli_cluster = ''
-            print ('User not in any cluster yet!\n', e)
-        try:
-            user_in_sec_cluster = suggestUser(u_id, gs)
-        except AttributeError as e:
-            user_in_sec_cluster = ''
-            print ('User not in any cluster yet!\n', e)
-        try:
-            user_in_eco_cluster = suggestUser(u_id, ge)
-        except AttributeError as e:
-            pass
-            # user_in_eco_cluster = ''
-            # print ('User not in any cluster yet!\n', e)
+        users_in_heal_cluster = suggestUser(u_id, gh) or None
+        users_in_poli_cluster = suggestUser(u_id, gp) or None
+        users_in_sec_cluster = suggestUser(u_id, gs) or None
+        user_in_eco_cluster = suggestUser(u_id, ge) or None
 
 
         form = PostForm()
@@ -85,7 +68,7 @@ def newsfeed():
                             users=users,
                             clusterd_user=users_in_heal_cluster,
                             users_in_poli_cluster=users_in_poli_cluster,
-                            user_in_sec_cluster=user_in_sec_cluster,
+                            users_in_sec_cluster=users_in_sec_cluster,
                             user_in_eco_cluster=user_in_eco_cluster
                             )
     else:
@@ -127,7 +110,6 @@ def follow(email):
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=email).first() #get the specific user
-        print('user: ', user)
         if user is None:
             flash('User {} not found.'.format(email))
             return redirect(url_for('index'))
@@ -149,7 +131,6 @@ def unfollow(email):
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=email).first()
-        # print('user: ', user)
         if user is None:
             flash('User {} not found!'.format(email))
             return redirect(url_for('index'))
@@ -176,30 +157,31 @@ def suggestUser(u_id, get_cluster):
     # get cluster
     cluster = get_cluster
     #get user_id column and save to list
-    col_id_list = cluster.user_id.to_list()
-    #Check if user_id is in list
-    if u_id in col_id_list:
-        all_user_id = pd.unique(col_id_list).tolist()
-        for i in all_user_id:
-            if u_id != i:
-                users_in_cluster = User.query.filter_by(id=i).first()
-                user_in_clust_list.append(users_in_cluster)
+    if cluster is not None:
+        col_id_list = cluster.user_id.to_list()
+        #Check if user_id is in list
+        if u_id in col_id_list:
+            all_user_id = pd.unique(col_id_list).tolist()
+            for i in all_user_id:
+                if u_id != i:
+                    users_in_cluster = User.query.filter_by(id=i).first()
+                    user_in_clust_list.append(users_in_cluster)
 
     return user_in_clust_list
 
 
-def cluster_table(get_clst, klas_):    
-    data = {'user_id': get_clst.user_id.to_list(),
-            'User': get_clst.User_name.to_list(),
-            'Post': get_clst.Post2.to_list(),
-            }
+def cluster_table(get_clst, klas_):
+    if get_clst is not None:
+        data = {'user_id': get_clst.user_id.to_list(),
+                'User': get_clst.User_name.to_list(),
+                'Post': get_clst.Post2.to_list(),
+                }
 
-    table_df = pd.DataFrame(data)
-    print('\nFrom cluster table func: \n', table_df)
+        table_df = pd.DataFrame(data)
+        tdf_html = table_df.to_html(classes=klas_)
 
-    tdf_html = table_df.to_html(classes=klas_)
-
-    return tdf_html
+        return tdf_html
+    return '<h2> Opps No Post found under {} Cluster Yet!<h2>'.format(klas_)
 
 
 @app.route('/news_feed/health_cluster', methods=['GET'])
