@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, redirect, request, session, json, jsonify
 from werkzeug.utils import secure_filename
 from config import Config
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 import pandas as pd
 
 #code added by codeOlam
@@ -53,7 +53,7 @@ def newsfeed():
 
         form = PostForm()
         #Get all post to news feeds
-        newsfeeds = Post.query.all()
+        newsfeeds = Post.query.order_by(desc(Post.created_on)).all()
 
         # suggestUser()
         #ToDo: send all new post to update pd dataframe
